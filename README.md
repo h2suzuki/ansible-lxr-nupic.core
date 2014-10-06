@@ -10,7 +10,7 @@ This playbook is tested with:
 
 ## Instructions
 
-Firstly edit the "hosts" inventory file to indicate the machines where you want to deploy Lxr.  Secondly edit the "group_vars/lxr-servers" file to set the configuration parameters such as the web server url.  If you're granted to use glimpse for free text searching, change the value of `lxr_use_search_engine` to "glimpse".
+Firstly edit the "hosts" inventory file to indicate the machines where you want to deploy Lxr.  Secondly edit the "group_vars/lxr-servers" file to set the configuration parameters such as the web server url.
 
 Then, run the playbook like the below:
 
@@ -23,19 +23,15 @@ When the playbook run completes, you should be able to explore the target source
 
 ## Special notes
 
-1. This playbook *disables SELinux* on the target machine, and you may be asked to reboot the machine.  After the reboot, run the playbook again.  The playbook confirms that SELinux is off and continues its setup.
+ - This playbook **disables SELinux** on the target machine, and you may be asked to reboot the machine.  After the reboot, run the playbook again.  The playbook confirms that SELinux is off and continues its setup.
 
-2. This playbook is split to three phases (roles and tags):
+ - This playbook is split to three phases (roles and tags):
 
- - the setup phase: install and configure Lxr on the target machine
- - the tree_retrieval phase: store the source tree in Lxr's internal directory
- - the indexing phase: index the source tree for cross-referencing & searching
+   1. the setup phase: install and configure Lxr on the target machine
+   2. the tree_retrieval phase: store the source tree in Lxr's internal directory
+   3. the indexing phase: index the source tree for cross-referencing & searching
 
-In order to setup the target machine for Lxr, the playbook requires ssh login via root.  It will create `lxr_user` user during the setup phase.  After that, it uses `lxr_user` user only to obtain and index the source tree.
-
-3. For free text searching, this playbook can install glimpse for you.  Glimpse requires a proper license.  If you have the license to use glimpse, or you're qualified for any license-free usage, you can change `lxr_use_search_engine` in "group_vars/lxr-servers" to enable it.
-
-See Also: http://webglimpse.net/sublicensing/licensing.html
+   In order to setup the target machine for Lxr, the playbook requires ssh login via root.  It will create `lxr_user` user during the setup phase.  After that, it uses `lxr_user` user only to obtain and index the source tree.
 
 
 ## Other usages

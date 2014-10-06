@@ -53,16 +53,15 @@ lxr_db_name:          '{{ lxr_source_repo_dir ~ "/lxr.db" }}'
 lxr_ignore_dirs:      "['.git']"   # must be a perl list of strings
 
 
-# *************************** !! CAUTION !! ****************************
-#  Glimpse requires a proper license to use. See the below pages:
+# **********************************************************************
+#  As of Sept 18,2014, Glimpse's license changed to ISC open source license.
+#  So, the default setting is now to use glimpse.
+
 #    http://webglimpse.net/sublicensing/licensing.html
 #    http://webglimpse.net/download.php
 #
-# If you have the license or you are qualified for one of the license-free
-# usages, change the value of `lxr_use_search_engine` to "glimpse" below.
-#
-lxr_use_search_engine: no
-#lxr_use_search_engine: glimpse
+lxr_use_search_engine: glimpse
+#lxr_use_search_engine: no
 #
 # **********************************************************************
 

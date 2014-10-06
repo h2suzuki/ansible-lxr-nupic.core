@@ -4,10 +4,6 @@
 
 # Assumed remote_user: {{ lxr_user }}
 
-# Glimpse requires a proper license to use. See the below:
-#   http://webglimpse.net/sublicensing/licensing.html
-#   http://webglimpse.net/download.php
- 
 - name: check if glimpse binary exists
   stat: path={{ glimpse_bin }}
   register: st
