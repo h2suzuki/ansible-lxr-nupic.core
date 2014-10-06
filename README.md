@@ -4,8 +4,10 @@ This playbook deploys a Lxr web server. Then, it downloads the target source tre
 
 This playbook is tested with:
 
-- Ansible 1.7 or newer
-- CentOS 6.5 hosts
+ - Ansible 1.7-1
+ - CentOS 6.5
+
+for the controller host and the target hosts.
 
 
 ## Instructions
