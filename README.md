@@ -1,13 +1,13 @@
-## Ansible Playbook | Lxr Deployment
+## Ansible Playbook | Lxr Deployment - Nupic.core
 
 This playbook deploys Lxr Source Code Indexer and Cross-referencer.  Then, it downloads the target source tree from github and indexing it for identifier / free-text search.
 
-This playbook is tested with:
+This playbook is tested for the controller and the target machines with:
 
  - Ansible 1.7-1
  - CentOS 6.5
 
-for the controller host and the target hosts.
+This playbook can index any git repository that "ctag" can read, but the configuration file is set to index [nupic.core](https://github.com/numenta/nupic.core) because it is the purpose of this project.
 
 
 ## Instructions
@@ -79,5 +79,6 @@ Additionally you may want to uninstall the packages that this playbook has insta
  - [Ansible@github](https://github.com/ansible/ansible) / [Ansible Docs](http://docs.ansible.com/)
  - [Lxr@sourceforge.net](http://sourceforge.net/projects/lxr/) / [Lxr web-site](http://lxr.sourceforge.net/en/index.shtml)
  - [Glimpse Home](http://webglimpse.net/)
+ - [Nupic.core@github](https://github.com/numenta/nupic.core)
 
 
