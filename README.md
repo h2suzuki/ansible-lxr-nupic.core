@@ -72,3 +72,11 @@ Three things you need to do in order to uninstall the deployed lxr service.
 
 Additionally you may want to uninstall the packages that this playbook has installed.  See "roles/lxr/setup/tasks/020-install_pkgs.yml" for the package names.
 
+
+## Additional references
+
+ - [Ansible@github](https://github.com/ansible/ansible), [Ansible Docs](http://docs.ansible.com/)
+ - [Lxr@sourceforge.net](http://sourceforge.net/projects/lxr/), [Lxr web-site](http://lxr.sourceforge.net/en/index.shtml)
+ - [Glimpse Home](http://webglimpse.net/)
+
+
