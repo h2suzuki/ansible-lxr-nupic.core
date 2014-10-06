@@ -1,4 +1,4 @@
---- # file: roles/lxr/tree_retrieval/tasks/github.yml
+--- # file: roles/lxr/tree_retrieval/tasks/repo-git.yml
 
 # Clone the remote repo to the local and checkout by the specified tag
 

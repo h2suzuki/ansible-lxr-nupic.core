@@ -4,9 +4,12 @@
 
 # Assumed remote_user: {{ lxr_user }}
 
-# the repository-type dependent tasks: github
-- include: github.yml
-  when: source_tree_url | search("github.com")
+- name: check the repository type
+  fail: msg="Do not know how to obtain the source tree"
+  when: '{{ not source_tree_url | search("git") }}'
+
+- include: repo-git.yml
+  when: source_tree_url | search("git")
 
 - name: add lxr_tag_name to lxr_config
   script: lxrconf_mod_version.sh {{ lxr_config }} add "{{ lxr_tag_name }}"
