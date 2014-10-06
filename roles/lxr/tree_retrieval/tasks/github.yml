@@ -1,6 +1,6 @@
 --- # file: roles/lxr/tree_retrieval/tasks/github.yml
 
-# Clone/update the remote repo to local and checkout by a specific tag
+# Clone the remote repo to the local and checkout by the specified tag
 
 # Assumed remote_user: {{ lxr_user }}
 
@@ -17,18 +17,19 @@
 #                                        v
 # local: /path/to/source_repo/proj_name/v1.0.1/ (a specific version)
 
-- name: determine the source tree directories
+- name: locate the bare & the destination repos
   set_fact:
     bare_repo: '{{ lxr_source_repo_dir ~"/"~ lxr_tree_name ~".git" }}'
     dest_repo: '{{ lxr_source_repo_dir ~"/"~ lxr_tree_name ~"/"~ lxr_tag_name }}'
-- name: clone/update the local repository
+
+- name: update the local repository by clone
   git: repo={{ source_tree_url }} remote={{ source_tree_url }}
        dest={{ bare_repo }} bare=yes
   register: clone_result
   ignore_errors: True
 
-# As git module sporadically failes, a recovery task is provided.
-- name: clone/update the local repository (retry)
+# As git module sporadically fails, a recovery task is provided here.
+- name: update the local repository by clone (retry)
   git: repo={{ source_tree_url }} remote={{ source_tree_url }}
        dest={{ bare_repo }} bare=yes
   when: clone_result | failed
