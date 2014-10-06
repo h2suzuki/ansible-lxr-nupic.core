@@ -1,4 +1,5 @@
 ## Ansible Playbook | Lxr Deployment - Nupic.core
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/h2suzuki/ansible-lxr-nupic.core?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 This playbook deploys Lxr Source Code Indexer and Cross-referencer.  Then, it downloads the target source tree from github and indexing it for identifier / free-text search.
 
