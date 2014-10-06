@@ -1,6 +1,6 @@
-## Lxr Source Code Indexer and Cross-referencer Deployment
+## Ansible Playbook: Lxr Deployment
 
-This playbook deploys a Lxr web server. Then, it downloads the target source tree from github and indexing it for identifier / free-text search.
+This playbook deploys Lxr Source Code Indexer and Cross-referencer.  Then, it downloads the target source tree from github and indexing it for identifier / free-text search.
 
 This playbook is tested with:
 
@@ -16,11 +16,11 @@ Firstly edit the "hosts" inventory file to indicate the machines where you want 
 
 Then, run the playbook like the below:
 
-	ansible-playbook -i hosts site.yml
+        ansible-playbook -i hosts site.yml
 
 When the playbook run completes, you should be able to explore the target source tree on the web server url indicated by "group_vars/lxr-servers".
 
-        http://{{ httpd_server_name }}/lxr/{{ lxr_tree_name }}/source
+        http://{{ httpd_server_name }}:{{ httpd_port }}/lxr/{{ lxr_tree_name }}/source
 
 
 ## Special notes
