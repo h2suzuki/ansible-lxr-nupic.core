@@ -8,7 +8,7 @@ This playbook is tested for the controller and the target machines with:
  - Ansible 1.7-1
  - CentOS 6.5
 
-This playbook can index any git repository that "ctag" can read, but the configuration file is set to index [nupic.core](https://github.com/numenta/nupic.core) because it is the purpose of this project.
+This playbook can index any git repository that "ctag" can handle, but the configuration file is set to index [nupic.core](https://github.com/numenta/nupic.core) because it is the purpose of this project.
 
 
 ## Instructions
@@ -34,18 +34,18 @@ When the playbook run completes, you should be able to explore the target source
    2. the tree_retrieval phase: store the source tree in Lxr's internal directory
    3. the indexing phase: index the source tree for cross-referencing & searching
 
-   In order to setup the target machine, the playbook requires ssh login via root.  It will create `lxr_user` user during the setup phase.  After that, it only uses `lxr_user` user to obtain and index the source tree.
+   In order to setup the target machine, the playbook requires root ssh login.  It will create `lxr_user` user during the setup phase.  After that, it only uses `lxr_user` user to retrieve and index the source tree.
 
 
 ## Other usages
 
 There are several useful tags that you can use after the installation.
 
-In order to add another version of the source tree, edit `lxr_tag_name`(for browsing) and `lxr_tag_vcs`(for checkout) in "group_vars/lxr-servers".  Then, run the playbook again like the below.
+To add another version of the source tree, edit `lxr_tag_name`(for browsing) and `lxr_tag_vcs`(for checkout) in "group_vars/lxr-servers".  Then, run the playbook again with the following tags.
 
         ansible-playbook -i hosts site.yml --tags retrieve_source,indexing
 
-You can also pass `lxr_tag_name` and `lxr_tag_vcs` using "-e" instead of "group_vars/lxr-servers".
+You can also pass `lxr_tag_name` and `lxr_tag_vcs` using "-e" command line option, so you don't need to edit the file.
 
         ansible-playbook -i hosts site.yml --tags tree_retrieval,indexing \
           -e 'lxr_tag_name=v1.1-8f0d lxr_tag_vcs=8f0d...(40-digit sha1 omitted)'
@@ -54,12 +54,12 @@ To list the tree versions on the browser, specify `list_tree_tags`.
 
         ansible-playbook -i hosts site.yml --tags list_tree_tags
 
-To run indexing again, with special parameters for Lxr `genxref` command, use `lxr_genref_opts` like the below.  This example drops unreferenced data from DB. i.e. garbage collection.
+To run indexing again, with special parameters of Lxr `genxref` command, use `lxr_genref_opts`.  The below example drops unreferenced data from DB. i.e. garbage collection.
 
         ansible-playbook -i hosts site.yml --tags indexing \
           -e 'lxr_genref_opts="--reindexall --allversions"'
 
-During setup, you can skip OS tweaking (firewall so forth) and package requirement checks by `os_settings` tag.
+During setup, you can skip OS tweaking (such as firewall setting) and package requirement checks by "--skip-tags os_settings" option.
 
         ansible-playbook -i hosts site.yml --tags setup --skip-tags os_settings
 
@@ -72,7 +72,7 @@ Three things you need to do in order to uninstall the deployed lxr service.
  - remove Lxr's httpd configuration file. c.f. `httpd_lxr_conf`
  - revert the changes on the httpd main configuration file: ServerName and Listen
 
-Additionally you may want to uninstall the packages that this playbook has installed.  See "roles/lxr/setup/tasks/020-install_pkgs.yml" for the package names.
+To uninstall the packages that this playbook has installed for the requirements, see "roles/lxr/setup/tasks/020-install_pkgs.yml" for the package names.
 
 
 ## Additional references
@@ -81,5 +81,4 @@ Additionally you may want to uninstall the packages that this playbook has insta
  - [Lxr@sourceforge.net](http://sourceforge.net/projects/lxr/) / [Lxr web-site](http://lxr.sourceforge.net/en/index.shtml)
  - [Glimpse Home](http://webglimpse.net/)
  - [Nupic.core@github](https://github.com/numenta/nupic.core)
-
 
