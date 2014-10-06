@@ -1,4 +1,4 @@
-## Ansible Playbook: Lxr Deployment
+## Ansible Playbook | Lxr Deployment
 
 This playbook deploys Lxr Source Code Indexer and Cross-referencer.  Then, it downloads the target source tree from github and indexing it for identifier / free-text search.
 
@@ -47,7 +47,7 @@ In order to add another version of the source tree, edit `lxr_tag_name`(for brow
 You can also pass `lxr_tag_name` and `lxr_tag_vcs` using "-e" instead of "group_vars/lxr-servers".
 
         ansible-playbook -i hosts site.yml --tags tree_retrieval,indexing \
-        -e 'lxr_tag_name=v1.1-8f0d lxr_tag_vcs=8f0d...(40-digit sha1 omitted)'
+          -e 'lxr_tag_name=v1.1-8f0d lxr_tag_vcs=8f0d...(40-digit sha1 omitted)'
 
 To list the tree versions on the browser, specify `list_tree_tags`.
 
@@ -55,7 +55,8 @@ To list the tree versions on the browser, specify `list_tree_tags`.
 
 To run indexing again, with special parameters for Lxr `genxref` command, use `lxr_genref_opts` like the below.  This example drops unreferenced data from DB. i.e. garbage collection.
 
-        ansible-playbook -i hosts site.yml --tags indexing -e 'lxr_genref_opts="--reindexall --allversions"'
+        ansible-playbook -i hosts site.yml --tags indexing \
+          -e 'lxr_genref_opts="--reindexall --allversions"'
 
 During setup, you can skip OS tweaking (firewall so forth) and package requirement checks by `os_settings` tag.
 
@@ -75,8 +76,8 @@ Additionally you may want to uninstall the packages that this playbook has insta
 
 ## Additional references
 
- - [Ansible@github](https://github.com/ansible/ansible), [Ansible Docs](http://docs.ansible.com/)
- - [Lxr@sourceforge.net](http://sourceforge.net/projects/lxr/), [Lxr web-site](http://lxr.sourceforge.net/en/index.shtml)
+ - [Ansible@github](https://github.com/ansible/ansible) / [Ansible Docs](http://docs.ansible.com/)
+ - [Lxr@sourceforge.net](http://sourceforge.net/projects/lxr/) / [Lxr web-site](http://lxr.sourceforge.net/en/index.shtml)
  - [Glimpse Home](http://webglimpse.net/)
 
 
