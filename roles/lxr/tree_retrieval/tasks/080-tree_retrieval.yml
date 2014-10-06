@@ -1,0 +1,24 @@
+--- # file: roles/lxr/tree_retrieval/tasks/080-tree_retrieval.yml
+
+# Retrieve the source tree to browse, then add it to lxr_conf
+
+# Assumed remote_user: {{ lxr_user }}
+
+# the repository-type dependent tasks: github
+- include: github.yml
+  when: source_tree_url | search("github.com")
+
+- name: add lxr_tag_name to lxr_config
+  script: lxrconf_mod_version.sh {{ lxr_config }} add "{{ lxr_tag_name }}"
+  register: mod_result
+  changed_when: mod_result.stdout | search("true")
+
+- name: obtain the version tags from lxr_config
+  script: lxrconf_show_version.sh {{ lxr_config }}
+  register: show_result
+  changed_when: false
+  tags: list_tree_tags
+
+- name: these tags will be shown on the browser
+  debug: var=show_result.stdout
+  tags: list_tree_tags

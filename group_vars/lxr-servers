@@ -1,0 +1,79 @@
+--- # group_vers/lxr-servers
+
+# The target source tree to index by Lxr
+source_tree_url: 'https://github.com/numenta/nupic.core.git'
+
+lxr_tree_name: 'nupic.core'
+lxr_tag_vcs:   '1ab1bac59e50715e8f45af9386ca11b6510899e3'
+lxr_tag_name:  '2014-09-18.1ab1bac'  # No space nor () are allowed.
+
+lxr_caption:   'Nupic.core Source'
+lxr_logo_url:  'http://numenta.org/images/numenta-icon64.png'
+project_url:   'https://github.com/numenta/nupic.core'
+
+
+# Httpd
+httpd_port: 80
+httpd_server_name: '{{ inventory_hostname }}'
+
+httpd_version:    '2.2'
+httpd_main_conf:  '/etc/httpd/conf/httpd.conf'
+httpd_lxr_conf:   '/etc/httpd/conf.d/apache-lxrserver.conf'
+httpd_server_url: '{{ "http://" ~ httpd_server_name ~":"~ httpd_port }}'
+
+
+
+
+# -------- the following parameters should work with defaults --------
+
+# EPEL repository package
+Fedora_site: 'http://dl.fedoraproject.org/pub'
+EPEL_repo_pkg: '/epel/6/i386/epel-release-6-8.noarch.rpm'
+EPEL_repo_url: '{{ Fedora_site ~ EPEL_repo_pkg }}'
+
+
+# Remote user: this user is to back Lxr service on the target machine
+lxr_user: lxruser
+lxr_user_home: /home/lxruser
+lxr_user_login_pubkey: '{{ lookup("file","~/.ssh/id_rsa.pub") }}'
+
+
+# Lxr
+lxr_download_url: "http://downloads.sourceforge.net/project/lxr/stable/lxr-2.0.2.tgz"
+lxr_csum: "06a1881803cf75ce15b098a4e11ccf8f70147cd772d33232af8ce7b247a74b10"
+
+lxr_dir:              '{{ lxr_user_home ~ "/lxr" }}'
+lxr_glimpse_db_dir:   '{{ lxr_user_home ~ "/local/share/glimpse" }}'
+lxr_source_repo_dir:  '{{ lxr_user_home ~ "/local/share/lxr" }}'
+lxr_genconf_log_file: '{{ lxr_user_home ~ "/gen-configure-lxr.log" }}'
+lxr_config:           '{{ lxr_dir  ~ "/lxr.conf" }}'
+lxr_config_script:    '{{ lxr_dir  ~ "/scripts/configure-lxr.pl" }}'
+lxr_custom_dir:       '{{ lxr_dir  ~ "/custom.d" }}'
+lxr_db_name:          '{{ lxr_source_repo_dir ~ "/lxr.db" }}'
+lxr_ignore_dirs:      "['.git']"   # must be a perl list of strings
+
+
+# *************************** !! CAUTION !! ****************************
+#  Glimpse requires a proper license to use. See the below pages:
+#    http://webglimpse.net/sublicensing/licensing.html
+#    http://webglimpse.net/download.php
+#
+# If you have the license or you are qualified for one of the license-free
+# usages, change the value of `lxr_use_search_engine` to "glimpse" below.
+#
+lxr_use_search_engine: no
+#lxr_use_search_engine: glimpse
+#
+# **********************************************************************
+
+# Glimpse
+glimpse_download_url: "http://webglimpse.net/trial/glimpse-latest.tar.gz"
+glimpse_csum: "3045296877bc7a3714ae10872056030175c2f10de83544aa7f08811f24d38077"
+
+glimpse_prefix_dir: '{{ lxr_user_home ~ "/local" }}'
+glimpse_bin_dir:    '{{ glimpse_prefix_dir ~ "/bin" }}'  # for ~/.bash_profile
+glimpse_bin:        '{{ glimpse_bin_dir ~ "/glimpse" }}'
+glimpseindex_bin:   '{{ glimpse_bin_dir ~ "/glimpseindex" }}'
+indexing_progress_file: '{{ lxr_user_home ~ "/progress.log" }}'
+indexing_result_file:   '{{ lxr_user_home ~ "/index_result.log" }}'
+

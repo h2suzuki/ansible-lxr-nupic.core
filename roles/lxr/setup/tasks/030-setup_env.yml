@@ -1,0 +1,25 @@
+--- # file: roles/lxr/setup/tasks/030-setup_env.yml
+
+# Setup the login environment of lxr_user
+
+# Assumed remote_user: {{ lxr_user }}
+
+- name: create the directory for Lxr DB and the source trees 
+  file: path={{ lxr_source_repo_dir }} state=directory mode=0755
+
+- name: create the install directory for glimpse
+  file: path={{ glimpse_prefix_dir }} state=directory mode=0755
+  when: lxr_use_search_engine == "glimpse"
+
+- name: create the index directory for glimpse
+  file: path={{ lxr_glimpse_db_dir }} state=directory mode=0755
+  when: lxr_use_search_engine == "glimpse"
+
+- name: setup $PATH for bash login usage
+  lineinfile: "dest=~/.bash_profile
+    regexp='^PATH='
+    line='PATH=$PATH:{{ glimpse_bin_dir }}'
+    state=present"
+  when: lxr_use_search_engine == "glimpse" and
+        glimpse_bin_dir is defined
+

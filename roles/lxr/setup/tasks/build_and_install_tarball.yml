@@ -1,0 +1,42 @@
+--- # file: roles/lxr/setup/tasks/build_and_install_tarball.yml
+
+# Build and install the binary out of its tarball
+
+# Assumed remote_user: none(any user is oka)
+
+# Required vars:
+#    tarball: ~/sample.tar.gz
+#    build_dir: ~/sample
+#    prefix_dir: ~/local
+#    sudo_install: False
+
+- name: expand prefix_dir to obtain the absolute path
+  command: chdir={{ prefix_dir }} pwd
+  register: prefix
+  changed_when: False
+
+- name: cleanup the build directory
+  file: path={{ build_dir }} state=absent
+
+- name: prepare the build directory
+  file: path={{ build_dir }} state=directory
+
+- name: untar the tarball
+  command: tar -xzf {{ tarball }} -C {{ build_dir }} --strip-components=1
+
+- name: run ./configure
+  command: chdir={{ build_dir }} ./configure --prefix={{ prefix.stdout }}
+
+- name: make
+  command: chdir={{ build_dir }} make
+
+- name: make check
+  command: chdir={{ build_dir }} make check
+
+- name: make install
+  command: chdir={{ build_dir }} make install
+  sudo: sudo_install
+
+- name: cleanup the build directory
+  file: path={{ build_dir }} state=absent
+

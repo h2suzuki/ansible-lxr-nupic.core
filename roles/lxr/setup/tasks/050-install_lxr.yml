@@ -1,0 +1,33 @@
+--- # file: roles/lxr/setup/tasks/050-install_lxr.yml
+
+# Install Lxr
+
+# Assumed remote_user: {{ lxr_user }}
+
+- name: notice about the lxr tarball
+  debug: msg="If the remote tarball is changed,
+              sha256sum(csum) must be updated by hand."
+
+- name: download the lxr tarball
+  get_url: url={{ lxr_download_url }} sha256sum={{ lxr_csum }}
+    dest=~/lxr.tar.gz force=True
+  register: lxr_downloaded_tarball
+
+- name: cleanup the lxr_dir directory
+  file: path={{ lxr_dir }} state=absent
+  when: lxr_downloaded_tarball | changed
+
+- name: prepare the lxr_dir directory
+  file: path={{ lxr_dir }} state=directory
+
+- name: untar the tarball
+  command: tar -xzf ~/lxr.tar.gz -C {{ lxr_dir }} --strip-components=1
+  when: lxr_downloaded_tarball | changed
+
+- name: check the environment
+  command: chdir={{ lxr_dir }} ./genxref --checkonly
+  register: lxr_envchk_result
+  changed_when: False
+
+- debug: var=lxr_envchk_result.stdout
+

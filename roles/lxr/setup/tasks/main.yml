@@ -1,0 +1,14 @@
+--- # file: roles/lxr/setup/tasks/main.yml
+
+# Deploy Lxr web service on this machine
+
+# Assumed remote_user: root
+
+- { include: 010-tweak_os.yml,        tags: os_settings }
+- { include: 020-install_pkgs.yml,    tags: os_settings }
+- { include: 030-setup_env.yml,       ansible_ssh_user: "{{ lxr_user }}" }
+- { include: 040-install_glimpse.yml, ansible_ssh_user: "{{ lxr_user }}" }
+- { include: 050-install_lxr.yml,     ansible_ssh_user: "{{ lxr_user }}" }
+- { include: 060-config_lxr.yml,      ansible_ssh_user: "{{ lxr_user }}" }
+- { include: 070-setup_httpd.yml }
+

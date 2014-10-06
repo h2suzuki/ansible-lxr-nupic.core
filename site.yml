@@ -1,0 +1,14 @@
+--- # file: site.yml
+
+# This playbook deploys Lxr source code indexer and cross-referencer
+
+- hosts: lxr-servers
+
+  remote_user: root
+
+  gather_facts: False
+
+  roles:
+    - { role: lxr/setup,          tags: setup  }
+    - { role: lxr/tree_retrieval, tags: tree_retrieval }
+    - { role: lxr/indexing,       tags: indexing }

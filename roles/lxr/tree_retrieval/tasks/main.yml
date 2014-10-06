@@ -1,0 +1,8 @@
+--- # file: roles/lxr/tree_retrieval/tasks/main.yml
+
+# Obtain the source tree to brown and add the tag version to lxr_conf
+
+# Assumed remote_user: root
+
+- { include: 080-tree_retrieval.yml, ansible_ssh_user: "{{ lxr_user }}" }
+

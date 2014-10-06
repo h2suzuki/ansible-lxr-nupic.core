@@ -1,0 +1,48 @@
+--- # file: roles/lxr/setup/tasks/010-tweak_os.yml
+
+# Tweak OS settings for Lxr
+
+# Assumed remote_user: root
+
+- name: ensure the system has libselinux-python
+  yum: name=libselinux-python state=present
+
+- name: disable selinux in the config file
+  selinux: state=disabled
+
+- name: check if a reboot is required
+  command: getenforce
+  register: selinux_state
+  changed_when: no
+
+- name: bailing out for a reboot
+  fail: msg="Reboot the system and rerun the playbook after that."
+  when: selinux_state.stdout != "Disabled"
+
+- name: check if firewall is running
+  command: service iptables status
+  register: firewall
+  ignore_errors: yes
+  changed_when: no
+
+- name: create /etc/sysconfig/iptabes if it does not exist
+  command: creates=/etc/sysconfig/iptables
+    /etc/rc.d/init.d/iptables save
+  when: firewall.stdout | search("INPUT")
+
+- name: open httpd port when firewall is running
+  lineinfile:
+    dest=/etc/sysconfig/iptables
+    regexp="^-A INPUT.*--dport {{ httpd_port }}"
+    line="-A INPUT -m tcp -p tcp --dport {{ httpd_port }} -j ACCEPT"
+    insertbefore="^-A INPUT.*REJECT"
+    state=present
+  notify: reload iptables
+  when: firewall.stdout | search("INPUT")
+
+- name: setup the user for lxr
+  user: name="{{ lxr_user }}" state=present
+
+- name: register ssh public key to lxr_user
+  authorized_key: user="{{ lxr_user }}" key="{{ lxr_user_login_pubkey }}"
+

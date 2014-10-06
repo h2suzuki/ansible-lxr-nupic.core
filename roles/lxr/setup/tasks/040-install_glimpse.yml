@@ -1,0 +1,35 @@
+--- # file: roles/lxr/setup/tasks/040-install_glimpse.yml
+
+# Install Glimpse to lxr_user's home directory
+
+# Assumed remote_user: {{ lxr_user }}
+
+# Glimpse requires a proper license to use. See the below:
+#   http://webglimpse.net/sublicensing/licensing.html
+#   http://webglimpse.net/download.php
+ 
+- name: check if glimpse binary exists
+  stat: path={{ glimpse_bin }}
+  register: st
+  when: lxr_use_search_engine == "glimpse"
+
+- name: notice about the glimpse tarball
+  debug: msg="If the remote tarball is changed,
+              sha256sum(csum) must be updated by hand."
+  when: lxr_use_search_engine == "glimpse"
+
+- name: download the glimpse tarball
+  get_url: url={{ glimpse_download_url }} sha256sum={{ glimpse_csum }}
+    dest=~/glimpse.tar.gz force=True
+  register: glimpse_downloaded_tarball
+  when: lxr_use_search_engine == "glimpse"
+
+- include: build_and_install_tarball.yml
+  vars:
+    tarball: ~/glimpse.tar.gz
+    build_dir: ~/glimpse
+    prefix_dir: '{{ glimpse_prefix_dir }}'
+    sudo_install: False
+  when: "{{ lxr_use_search_engine == 'glimpse' and
+            ( st.stat.exists == False or st.stat.size == 0 or
+              glimpse_downloaded_tarball | changed ) }}"

@@ -1,0 +1,56 @@
+--- # file: roles/lxr/setup/tasks/070-setup_httpd.yml
+
+# Setup httpd for Lxr
+
+# Assumed remote_user: root
+
+- name: patch the httpd config file to allow httpd_port(1/2)
+  lineinfile:
+    dest={{ lxr_custom_dir ~ "/apache-lxrserver.conf" }}
+    regexp="^NameVirtualHost "
+    line="NameVirtualHost *:{{ httpd_port }}"
+    state=present
+  register: rc1
+
+- name: patch the httpd config file to allow httpd_port(1/2)
+  lineinfile:
+    dest={{ lxr_custom_dir ~ "/apache-lxrserver.conf" }}
+    regexp="^<VirtualHost "
+    line="<VirtualHost *:{{ httpd_port }}>"
+    state=present
+  register: rc2
+
+- name: clean the outdated httpd config
+  file: path={{ httpd_lxr_conf }} state=absent
+  when: rc1 | changed or rc2 | changed
+
+- name: copy the httpd config file to the right place
+  command: creates={{ httpd_lxr_conf }}
+    cp {{ lxr_custom_dir ~ "/apache-lxrserver.conf" }} {{ httpd_lxr_conf }}
+  notify: reload httpd
+
+- name: set ServerName of httpd_main_conf
+  lineinfile:
+    dest={{ httpd_main_conf }}
+    regexp="^ServerName"
+    line="ServerName {{ httpd_server_name ~":"~ httpd_port }}"
+    insertafter="^#ServerName "
+    state=present
+  notify: reload httpd
+
+- name: set Listen port of httpd_main_conf
+  lineinfile:
+    dest={{ httpd_main_conf }}
+    regexp="^Listen"
+    line="Listen {{ httpd_port }}"
+    insertafter="^#Listen "
+    state=present
+  notify: reload httpd
+
+- name: make lxr_user home directory to be world searchable
+  file: path=~{{ lxr_user }} state=directory mode=0711
+
+- name: make glimpse DB directory to be world searchable
+  file: path={{ lxr_glimpse_db_dir }} state=directory mode=0755
+  when: lxr_use_search_engine == "glimpse"
+

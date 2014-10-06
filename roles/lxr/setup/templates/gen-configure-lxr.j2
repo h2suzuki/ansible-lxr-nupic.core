@@ -1,0 +1,74 @@
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
+# Generated using roles/lxr/setup/templates/gen-configure-lxr.j2
+
+# Required vars:
+#    lxr_genconf_log_file: the log file to see the current in/out progress
+#    httpd_server_url:     the url for the redirection to LXR front page
+#    glimpse_bin:          the path to glimpse binary
+#    glimpseindex_bin:     the path to glimpseindex binary
+#    lxr_glimpse_db_dir:   the directory to store glimpse database
+#    lxr_tree_name:        the name of this source tree
+#    lxr_caption:          the title on the browser page
+#    lxr_source_repo_dir:  the directory to store versions of source trees
+#    lxr_tag_name:         the initial version tag to be stored
+#    lxr_db_name:          the path to the sqlite DB file
+#    lxr_config_script:    the configuration script provided by Lxr
+#    lxr_dir:              the top directory of untar'ed lxr
+
+import pexpect
+import sys
+
+progress_log = open("{{ lxr_genconf_log_file }}",'w')
+
+configure_lxr_responses = {
+    r'single/multiple trees.*>.* ':'m\n',
+    r'Tree designation.*>.* ':'embedded\n',
+    r'--- Host name or IP.*>.* ':'{{ httpd_server_url }}\n',
+    r'Database engine.*>.* ':'sqlite\n',
+
+{% if lxr_use_search_engine != "glimpse" %}
+    r'in a non standard directory.*>.* ':'n\n',
+{% else %}
+    r'--- Location.*glimpse\).*>.* ':'{{ glimpse_bin }}\n',
+    r'--- Location.*index\).*>.* ':'{{ glimpseindex_bin }}\n',
+    r'--- Directory for glimpse.*>.* ':'{{ lxr_glimpse_db_dir }}\n',
+{% endif %}
+
+{% if httpd_version | version_compare('2.4','<') %}
+    r'Is your Apache version 2.4.*>.* ':'no\n',
+{% else %}
+    r'Is your Apache version 2.4.*>.* ':'yes\n',
+{% endif %}
+
+    r'--- Tree designation for URL.*>.* ':'{{ lxr_tree_name }}\n',
+    r'--- Caption in page header.*>.* ':'{{ lxr_caption }}\n',
+    r'--- Source directory.*>.* ':'{{ lxr_source_repo_dir ~"/"~ lxr_tree_name }}\n',
+    r'Label for version selection menu.*>.* ':'TAG\n',
+    r'--- Version name\?  .*>.* ':'{{ lxr_tag_name }}\n',
+    r'--- Version name\? \(hit return to stop.*>.* ':'\n',
+    r'--- Database file.*>.* ':'{{ lxr_db_name }}\n',
+    r'Configure another tree.*>.* ':'no\n',
+    r'>.* ':'\n'
+}
+
+def main():
+    output,ret = pexpect.run("{{ lxr_config_script }}",
+                     events=configure_lxr_responses,
+                     withexitstatus=True,
+                     cwd='{{ lxr_dir }}',
+                     logfile=progress_log)
+
+    if ret:
+        print "pexpect.run() failed with ret=%d",ret
+    else:
+        print "pexpect.run() succeeded"
+
+    print "-------- output --------"
+    print output
+    print "-------- output --------"
+
+
+if __name__ == "__main__":
+    main()

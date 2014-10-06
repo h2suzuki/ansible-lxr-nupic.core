@@ -1,0 +1,16 @@
+--- # file: roles/lxr/indexing/tasks/090-indexing_source_tree.yml
+
+# Index the source code
+
+# Assumed remote_user: {{ lxr_user }}
+
+- name: notice
+  debug: msg="Indexing can take very long time. Login to {{ lxr_user }} and
+              tail -f {{ indexing_progress_file }} to see the current status."
+
+- name: index the source directory
+  shell: chdir={{ lxr_dir }}
+    ./genxref --url={{ httpd_server_url ~ "/lxr/" ~ lxr_tree_name }}
+    --version={{ lxr_tag_name }} {{ lxr_genref_opts|default("") }}
+    1> {{ indexing_result_file }}
+    2> {{ indexing_progress_file }}
