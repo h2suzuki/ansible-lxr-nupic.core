@@ -25,7 +25,7 @@
   lineinfile:
     dest={{ lxr_custom_dir ~ "/lxr.conf" }}
     regexp="^\t, 'ignoredirs'"
-    line="\t, 'ignoredirs' => {{ lxr_ignore_dirs }}"
+    line="{{'\t'}}, 'ignoredirs' => {{ lxr_ignore_dirs }}"
     insertafter="^#\t, 'ignoredirs'"
     state=present
   register: ignoredirs_result
