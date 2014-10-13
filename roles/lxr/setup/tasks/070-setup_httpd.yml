@@ -47,10 +47,10 @@
     state=present
   notify: reload httpd
 
-- name: make lxr_user home directory to be world searchable
+- name: change lxr_user home directory to be world searchable
   file: path=~{{ lxr_user }} state=directory mode=0711
 
-- name: make glimpse DB directory to be world searchable
+- name: change glimpse DB directory to be world searchable
   file: path={{ lxr_glimpse_db_dir }} state=directory mode=0755
   when: lxr_use_search_engine == "glimpse"
 
