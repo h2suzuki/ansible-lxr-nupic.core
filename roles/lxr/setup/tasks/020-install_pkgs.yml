@@ -7,45 +7,49 @@
 # This can also be written using "with_items:", yet we can see the progress
 # more clearly in this way.
 
-- name: (1/13) install ctags for lxr
+- name: (1/14) install ctags for lxr
   yum: state=latest name=ctags
 
-- name: (2/13) install perl for lxr
+- name: (2/14) install perl for lxr
   yum: state=latest name=perl
 
-- name: (3/13) install perl-DBI for lxr
+- name: (3/14) install perl-DBI for lxr
   yum: state=latest name=perl-DBI
 
-- name: (4/13) install perl-DBI-SQLite for lxr
+- name: (4/14) install perl-DBI-SQLite for lxr
   yum: state=latest name=perl-DBD-SQLite
 
-- name: (5/13) install sqlite for lxr
+- name: (5/14) install sqlite for lxr
   yum: state=latest name=sqlite
 
-- name: (6/13) install httpd for lxr
+- name: (6/14) install httpd for lxr
   yum: state=latest name=httpd
 
-- name: (7/13) install mod_perl for lxr
+- name: (7/14) install mod_perl for lxr
   yum: state=latest name=mod_perl
 
-- name: (8/13) install pexpect to create lxr.conf
+- name: (8/14) install pexpect to create lxr.conf
   yum: state=latest name=pexpect
 
-- name: (9/13) install make for glimpse
+- name: (9/14) install make for glimpse
   yum: state=latest name=make
   when: lxr_use_search_engine == "glimpse"
 
-- name: (10/13) install gcc for glimpse
+- name: (10/14) install gcc for glimpse
   yum: state=present name=gcc-4*
   when: lxr_use_search_engine == "glimpse"
 
-- name: (11/13) install flex for glimpse
+- name: (11/14) install flex for glimpse
   yum: state=latest name=flex
   when: lxr_use_search_engine == "glimpse"
 
-- name: (12/13) install epel for File-MMagic
+- name: (12/14) install flex-devel for glimpse
+  yum: state=latest name=flex-devel
+  when: lxr_use_search_engine == "glimpse"
+
+- name: (13/14) install epel for File-MMagic
   yum: state=present name={{ EPEL_repo_url }}
 
-- name: (13/13) install File-MMagic for lxr
+- name: (14/14) install File-MMagic for lxr
   yum: state=latest name=perl-File-MMagic  # from EPEL
 
