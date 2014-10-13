@@ -54,3 +54,6 @@
   file: path={{ lxr_glimpse_db_dir }} state=directory mode=0755
   when: lxr_use_search_engine == "glimpse"
 
+- name: change Lxr DB to be world writable
+  file: path={{ lxr_db_name }} state=file mode=0666
+
