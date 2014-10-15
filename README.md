@@ -19,7 +19,7 @@ Then, run the playbook like the below:
 
         ansible-playbook -i hosts site.yml
 
-When the playbook run completes, you should be able to explore the target source tree on the web server url indicated by "group_vars/lxr-servers".
+When the playbook run completes, you should be able to explore the target source tree on the web server url, which is indicated by "group_vars/lxr-servers".
 
         http://{{ httpd_server_name }}:{{ httpd_port }}/lxr/{{ lxr_tree_name }}/source
 
@@ -28,7 +28,7 @@ When the playbook run completes, you should be able to explore the target source
 
  - This playbook **disables SELinux** on the target machine, and you may be asked to reboot the machine.  After the reboot, run the playbook again.  The playbook confirms that SELinux is off and continues its setup.
 
- - This playbook is split to three phases (using roles and tags):
+ - This playbook consists of three phases (using tags):
 
    1. the setup phase: install and configure Lxr on the target machine
    2. the tree_retrieval phase: store the source tree in Lxr's internal directory
@@ -54,12 +54,12 @@ To list the tree versions on the browser, specify `list_tree_tags`.
 
         ansible-playbook -i hosts site.yml --tags list_tree_tags
 
-To run indexing again, with special parameters of Lxr `genxref` command, use `lxr_genref_opts`.  The below example drops unreferenced data from DB. i.e. garbage collection.
+To run indexing again, with special parameters of Lxr `genxref` command, use `lxr_genref_opts`.  The below example performes garbage collection by droping unreferenced data from DB.
 
         ansible-playbook -i hosts site.yml --tags indexing \
           -e 'lxr_genref_opts="--reindexall --allversions"'
 
-During setup, you can skip OS tweaking (such as firewall setting) and package requirement checks by "--skip-tags os_settings" option.
+During setup, you can skip OS tweaking (such as firewall setting) and package checks by "--skip-tags os_settings" option.
 
         ansible-playbook -i hosts site.yml --tags setup --skip-tags os_settings
 
