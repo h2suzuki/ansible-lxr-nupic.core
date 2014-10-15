@@ -6,7 +6,7 @@
 
 - name: check the repository type
   fail: msg="Do not know how to obtain the source tree"
-  when: '{{ not source_tree_url | search("git") }}'
+  when: not ( source_tree_url | search("git") )
 
 - include: inc/repo_git.yml
   when: source_tree_url | search("git")

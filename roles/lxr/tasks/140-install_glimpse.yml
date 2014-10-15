@@ -26,6 +26,6 @@
     build_dir: ~/glimpse
     prefix_dir: '{{ glimpse_prefix_dir }}'
     sudo_install: False
-  when: "{{ lxr_use_search_engine == 'glimpse' and
-            ( st.stat.exists == False or st.stat.size == 0 or
-              glimpse_downloaded_tarball | changed ) }}"
+  when: lxr_use_search_engine == 'glimpse' and
+        ( st.stat.exists == False or st.stat.size == 0 or
+          glimpse_downloaded_tarball | changed )
