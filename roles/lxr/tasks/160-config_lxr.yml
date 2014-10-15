@@ -28,11 +28,11 @@
     line="{{'\t'}}, 'ignoredirs' => {{ lxr_ignore_dirs }}"
     insertafter="^#\t, 'ignoredirs'"
     state=present
-  register: ignoredirs_result
+  when: update_lxr_config
 
 - name: setup | lxr_config | copy the config file to the right place
   command: cp {{ lxr_custom_dir ~ "/lxr.conf" }} {{ lxr_config }}
-  when: update_lxr_config or ignoredirs_result | changed
+  when: update_lxr_config
 
 - name: setup | lxr_config | initialize Lxr DB
   shell: creates={{ lxr_db_name }} chdir={{ lxr_custom_dir }} ./initdb.sh
