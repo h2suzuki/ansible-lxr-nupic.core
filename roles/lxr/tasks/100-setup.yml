@@ -4,15 +4,15 @@
 
 # Assumed remote_user: root
 
-- { include: 110-tweak_os_RedHat6.yml,    tags: os_settings,
+- { include: 110-tweak_os_RedHat6.yml,    tags: [ setup, os_settings ],
     when: "ansible_os_family == 'RedHat' and 
            ansible_distribution_major_version == '6'" }
 
-- { include: 111-tweak_os_RedHat7.yml,    tags: os_settings,
+- { include: 111-tweak_os_RedHat7.yml,    tags: [ setup, os_settings ],
     when: "ansible_os_family == 'RedHat' and 
            ansible_distribution_major_version == '7'" }
 
-- { include: 120-install_pkgs_RedHat.yml, tags: os_settings,
+- { include: 120-install_pkgs_RedHat.yml, tags: [ setup, os_settings ],
     when: "ansible_os_family == 'RedHat' and
            {{ ansible_distribution_version | version_compare('6','>=') }}" }
 
