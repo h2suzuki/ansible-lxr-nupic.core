@@ -16,32 +16,27 @@ project_url:   'https://github.com/numenta/nupic.core'
 httpd_port: 80
 httpd_server_name: '{{ inventory_hostname }}'
 
-httpd_version:    '2.2'
-httpd_main_conf:  '/etc/httpd/conf/httpd.conf'
-httpd_lxr_conf:   '/etc/httpd/conf.d/apache-lxrserver.conf'
-httpd_server_url: '{{ "http://" ~ httpd_server_name ~":"~ httpd_port }}'
+
+# Tarballs to download
+lxr_download_url: "http://downloads.sourceforge.net/project/lxr/stable/lxr-2.0.2.tgz"
+lxr_csum: "06a1881803cf75ce15b098a4e11ccf8f70147cd772d33232af8ce7b247a74b10"
+
+glimpse_download_url: "http://webglimpse.net/trial/glimpse-latest.tar.gz"
+glimpse_csum: "3045296877bc7a3714ae10872056030175c2f10de83544aa7f08811f24d38077"
+
+
 
 
 
 
 # -------- the following parameters should work with defaults --------
 
-# EPEL repository package
-Fedora_site: 'http://dl.fedoraproject.org/pub'
-EPEL_repo_pkg: '/epel/6/i386/epel-release-6-8.noarch.rpm'
-EPEL_repo_url: '{{ Fedora_site ~ EPEL_repo_pkg }}'
-
-
-# Remote user: this user is to back Lxr service on the target machine
+# Remote user: this user is used to back Lxr service on the target machine
 lxr_user: lxruser
 lxr_user_home: /home/lxruser
 lxr_user_login_pubkey: '{{ lookup("file","~/.ssh/id_rsa.pub") }}'
 
-
 # Lxr
-lxr_download_url: "http://downloads.sourceforge.net/project/lxr/stable/lxr-2.0.2.tgz"
-lxr_csum: "06a1881803cf75ce15b098a4e11ccf8f70147cd772d33232af8ce7b247a74b10"
-
 lxr_dir:              '{{ lxr_user_home ~ "/lxr" }}'
 lxr_glimpse_db_dir:   '{{ lxr_user_home ~ "/local/share/glimpse" }}'
 lxr_source_repo_dir:  '{{ lxr_user_home ~ "/local/share/lxr" }}'
@@ -52,11 +47,19 @@ lxr_custom_dir:       '{{ lxr_dir  ~ "/custom.d" }}'
 lxr_db_name:          '{{ lxr_source_repo_dir ~ "/lxr.db" }}'
 lxr_ignore_dirs:      "['.git']"   # must be a perl list of strings
 
+# Glimpse
+glimpse_prefix_dir: '{{ lxr_user_home ~ "/local" }}'
+glimpse_bin_dir:    '{{ glimpse_prefix_dir ~ "/bin" }}'  # for ~/.bash_profile
+glimpse_bin:        '{{ glimpse_bin_dir ~ "/glimpse" }}'
+glimpseindex_bin:   '{{ glimpse_bin_dir ~ "/glimpseindex" }}'
+indexing_progress_file: '{{ lxr_user_home ~ "/progress.log" }}'
+indexing_result_file:   '{{ lxr_user_home ~ "/index_result.log" }}'
 
 # **********************************************************************
 #  As of Sept 18,2014, Glimpse's license changed to ISC open source license.
-#  So, the default setting is now to use glimpse.
-
+#  So, the default setting is TO USE glimpse now. If you want to disable
+#  free-text searching, change `lxr_use_search_engine` to "no".
+#
 #    http://webglimpse.net/sublicensing/licensing.html
 #    http://webglimpse.net/download.php
 #
@@ -65,14 +68,4 @@ lxr_use_search_engine: glimpse
 #
 # **********************************************************************
 
-# Glimpse
-glimpse_download_url: "http://webglimpse.net/trial/glimpse-latest.tar.gz"
-glimpse_csum: "3045296877bc7a3714ae10872056030175c2f10de83544aa7f08811f24d38077"
-
-glimpse_prefix_dir: '{{ lxr_user_home ~ "/local" }}'
-glimpse_bin_dir:    '{{ glimpse_prefix_dir ~ "/bin" }}'  # for ~/.bash_profile
-glimpse_bin:        '{{ glimpse_bin_dir ~ "/glimpse" }}'
-glimpseindex_bin:   '{{ glimpse_bin_dir ~ "/glimpseindex" }}'
-indexing_progress_file: '{{ lxr_user_home ~ "/progress.log" }}'
-indexing_result_file:   '{{ lxr_user_home ~ "/index_result.log" }}'
-
+# End of File.

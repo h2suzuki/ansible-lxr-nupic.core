@@ -1,0 +1,31 @@
+--- # file: roles/lxr/setup/tasks/010-tweak_os.yml
+
+# Tweak OS settings for Lxr
+
+# Assumed remote_user: root
+
+- name: ensure the system has libselinux-python
+  yum: name=libselinux-python state=present
+
+- name: disable selinux in the config file
+  selinux: state=disabled
+
+- name: check if a reboot is required
+  command: getenforce
+  register: selinux_state
+  changed_when: no
+
+- name: bailing out for a reboot
+  fail: msg="Reboot the system and rerun the playbook after that."
+  when: selinux_state.stdout != "Disabled"
+
+- name: open httpd port
+  firewalld: permanent=yes port={{ httpd_port }}/tcp state=enabled
+  notify: reload firewalld
+
+- name: setup the user for lxr
+  user: name="{{ lxr_user }}" state=present
+
+- name: register ssh public key to lxr_user
+  authorized_key: user="{{ lxr_user }}" key="{{ lxr_user_login_pubkey }}"
+

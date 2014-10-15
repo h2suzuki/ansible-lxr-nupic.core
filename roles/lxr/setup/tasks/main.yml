@@ -4,11 +4,24 @@
 
 # Assumed remote_user: root
 
-- { include: 010-tweak_os.yml,        tags: os_settings }
-- { include: 020-install_pkgs.yml,    tags: os_settings }
+- { include: 010-tweak_os_RedHat6.yml,    tags: os_settings,
+    when: "ansible_os_family == 'RedHat' and 
+           ansible_distribution_major_version == '6'" }
+
+- { include: 010-tweak_os_RedHat7.yml,    tags: os_settings,
+    when: "ansible_os_family == 'RedHat' and 
+           ansible_distribution_major_version == '7'" }
+
+- { include: 020-install_pkgs_RedHat.yml, tags: os_settings,
+    when: "ansible_os_family == 'RedHat' and
+           {{ ansible_distribution_version | version_compare('6','>=') }}" }
+
 - { include: 030-setup_env.yml,       ansible_ssh_user: "{{ lxr_user }}" }
 - { include: 040-install_glimpse.yml, ansible_ssh_user: "{{ lxr_user }}" }
 - { include: 050-install_lxr.yml,     ansible_ssh_user: "{{ lxr_user }}" }
 - { include: 060-config_lxr.yml,      ansible_ssh_user: "{{ lxr_user }}" }
-- { include: 070-setup_httpd.yml }
+
+- { include: 070-setup_httpd_RedHat.yml,
+    when: "ansible_os_family == 'RedHat' and
+           {{ ansible_distribution_version | version_compare('6','>=') }}" }
 
