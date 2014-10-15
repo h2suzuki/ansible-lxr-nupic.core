@@ -22,3 +22,13 @@
     --version={{ lxr_tag_name }} {{ lxr_genref_opts|default("") }}
     1> {{ indexing_result_file }}
     2> {{ indexing_progress_file }}
+
+- name: indexing | check the file permissions 
+  command: find '{{ lxr_glimpse_db_dir }}' -type f '!' -perm '-o+r'
+  register: find_result
+  changed_when: False
+
+- name: indexing | change the glimpse DB files to be o+r
+  file: path={{ item }} state=file mode=0644
+  with_items: find_result.stdout_lines
+  when: lxr_use_search_engine == "glimpse" and find_result.stdout != ""
