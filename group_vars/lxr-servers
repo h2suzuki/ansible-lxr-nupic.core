@@ -1,12 +1,12 @@
---- # group_vers/lxr-servers
+--- # file: group_vars/lxr-servers
 
 # The target source tree to index by Lxr
 source_tree_url: 'https://github.com/numenta/nupic.core.git'
 
-lxr_tree_name: 'nupic.core'
-lxr_tag_vcs:   '1ab1bac59e50715e8f45af9386ca11b6510899e3'
-lxr_tag_name:  '2014-09-18.1ab1bac'  # No space nor () are allowed.
+lxr_tag_vcs:   'HEAD'
+#lxr_tag_name:  '2014-10-11'  # the default is "commit-date.[short-hash]"
 
+lxr_tree_name: 'nupic.core'
 lxr_caption:   'Nupic.core Source'
 lxr_logo_url:  'http://numenta.org/images/numenta-icon64.png'
 project_url:   'https://github.com/numenta/nupic.core'

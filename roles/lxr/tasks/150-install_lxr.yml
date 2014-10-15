@@ -29,5 +29,5 @@
   register: lxr_envchk_result
   changed_when: False
 
-- debug: var=lxr_envchk_result.stdout
+- debug: var=lxr_envchk_result.stdout_lines
 

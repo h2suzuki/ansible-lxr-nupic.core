@@ -28,5 +28,5 @@
   tags: list_tree_tags
 
 - name: these tags will be shown on the browser
-  debug: var=show_result.stdout
+  debug: var=show_result.stdout_lines
   tags: list_tree_tags

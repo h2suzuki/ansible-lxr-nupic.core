@@ -48,7 +48,7 @@
 # Checkout the target version to the target directory.
 
 - name: lxr_tag_name to be used
-  debug: msg={{ lxr_tag_name }}
+  debug: var=lxr_tag_name
 
 - name: locate the destination repos
   set_fact:
