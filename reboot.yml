@@ -1,0 +1,22 @@
+--- # file: reboot.yml
+
+- name: This playbook reboots the target machines and waits for it to come up
+
+  hosts: lxr-servers
+
+  gather_facts: False
+
+  remote_user: root
+
+  tasks:
+    - name: reboot the machine
+      command: shutdown -r now
+      async: 0   # no timeout
+      poll: 0    # no poll; a fire and forget scheme
+      ignore_errors: True
+
+    - name: wait for the machine to come up
+      local_action: wait_for port=22
+        host={{ inventory_hostname }}
+        delay=30
+        state=started
