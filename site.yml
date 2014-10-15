@@ -1,15 +1,10 @@
 --- # file: site.yml
 
-# This playbook deploys Lxr source code indexer and cross-referencer
+- name: This playbook deploys Lxr source code indexer and cross-referencer
 
-- hosts: lxr-servers
+  hosts: lxr-servers
 
   remote_user: root
 
-  vars_files:
-    - "group_vars/{{ ansible_os_family ~ ansible_distribution_major_version }}"
-
   roles:
-    - { role: lxr/setup,          tags: setup  }
-    - { role: lxr/tree_retrieval, tags: tree_retrieval }
-    - { role: lxr/indexing,       tags: indexing }
+    - { role: lxr }

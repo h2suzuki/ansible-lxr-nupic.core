@@ -1,4 +1,4 @@
---- # file: roles/lxr/indexing/tasks/090-indexing_source_tree.yml
+--- # file: roles/lxr/tasks/310-indexing_source_tree.yml
 
 # Index the source code
 

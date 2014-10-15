@@ -17,55 +17,9 @@ httpd_port: 80
 httpd_server_name: '{{ inventory_hostname }}'
 
 
-# Tarballs to download
+# Lxr and glimpse tarballs to download and install
 lxr_download_url: "http://downloads.sourceforge.net/project/lxr/stable/lxr-2.0.2.tgz"
 lxr_csum: "06a1881803cf75ce15b098a4e11ccf8f70147cd772d33232af8ce7b247a74b10"
 
 glimpse_download_url: "http://webglimpse.net/trial/glimpse-latest.tar.gz"
 glimpse_csum: "3045296877bc7a3714ae10872056030175c2f10de83544aa7f08811f24d38077"
-
-
-
-
-
-
-# -------- the following parameters should work with defaults --------
-
-# Remote user: this user is used to back Lxr service on the target machine
-lxr_user: lxruser
-lxr_user_home: /home/lxruser
-lxr_user_login_pubkey: '{{ lookup("file","~/.ssh/id_rsa.pub") }}'
-
-# Lxr
-lxr_dir:              '{{ lxr_user_home ~ "/lxr" }}'
-lxr_glimpse_db_dir:   '{{ lxr_user_home ~ "/local/share/glimpse" }}'
-lxr_source_repo_dir:  '{{ lxr_user_home ~ "/local/share/lxr" }}'
-lxr_genconf_log_file: '{{ lxr_user_home ~ "/gen-configure-lxr.log" }}'
-lxr_config:           '{{ lxr_dir  ~ "/lxr.conf" }}'
-lxr_config_script:    '{{ lxr_dir  ~ "/scripts/configure-lxr.pl" }}'
-lxr_custom_dir:       '{{ lxr_dir  ~ "/custom.d" }}'
-lxr_db_name:          '{{ lxr_source_repo_dir ~ "/lxr.db" }}'
-lxr_ignore_dirs:      "['.git']"   # must be a perl list of strings
-
-# Glimpse
-glimpse_prefix_dir: '{{ lxr_user_home ~ "/local" }}'
-glimpse_bin_dir:    '{{ glimpse_prefix_dir ~ "/bin" }}'  # for ~/.bash_profile
-glimpse_bin:        '{{ glimpse_bin_dir ~ "/glimpse" }}'
-glimpseindex_bin:   '{{ glimpse_bin_dir ~ "/glimpseindex" }}'
-indexing_progress_file: '{{ lxr_user_home ~ "/progress.log" }}'
-indexing_result_file:   '{{ lxr_user_home ~ "/index_result.log" }}'
-
-# **********************************************************************
-#  As of Sept 18,2014, Glimpse's license changed to ISC open source license.
-#  So, the default setting is TO USE glimpse now. If you want to disable
-#  free-text searching, change `lxr_use_search_engine` to "no".
-#
-#    http://webglimpse.net/sublicensing/licensing.html
-#    http://webglimpse.net/download.php
-#
-lxr_use_search_engine: glimpse
-#lxr_use_search_engine: no
-#
-# **********************************************************************
-
-# End of File.

@@ -1,0 +1,27 @@
+--- # file: roles/lxr/tasks/100-setup.yml
+
+# Deploy Lxr web service on this machine
+
+# Assumed remote_user: root
+
+- { include: 110-tweak_os_RedHat6.yml,    tags: os_settings,
+    when: "ansible_os_family == 'RedHat' and 
+           ansible_distribution_major_version == '6'" }
+
+- { include: 111-tweak_os_RedHat7.yml,    tags: os_settings,
+    when: "ansible_os_family == 'RedHat' and 
+           ansible_distribution_major_version == '7'" }
+
+- { include: 120-install_pkgs_RedHat.yml, tags: os_settings,
+    when: "ansible_os_family == 'RedHat' and
+           {{ ansible_distribution_version | version_compare('6','>=') }}" }
+
+- { include: 130-setup_env.yml,       ansible_ssh_user: "{{ lxr_user }}" }
+- { include: 140-install_glimpse.yml, ansible_ssh_user: "{{ lxr_user }}" }
+- { include: 150-install_lxr.yml,     ansible_ssh_user: "{{ lxr_user }}" }
+- { include: 160-config_lxr.yml,      ansible_ssh_user: "{{ lxr_user }}" }
+
+- { include: 170-setup_httpd_RedHat.yml,
+    when: "ansible_os_family == 'RedHat' and
+           {{ ansible_distribution_version | version_compare('6','>=') }}" }
+

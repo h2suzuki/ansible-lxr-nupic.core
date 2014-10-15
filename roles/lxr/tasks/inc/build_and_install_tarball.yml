@@ -1,4 +1,4 @@
---- # file: roles/lxr/setup/tasks/build_and_install_tarball.yml
+--- # file: roles/lxr/tasks/inc/build_and_install_tarball.yml
 
 # Build and install the binary out of its tarball
 

@@ -1,4 +1,4 @@
---- # file: roles/lxr/setup/tasks/010-tweak_os.yml
+--- # file: roles/lxr/tasks/110-tweak_os_RedHat6.yml
 
 # Tweak OS settings for Lxr
 

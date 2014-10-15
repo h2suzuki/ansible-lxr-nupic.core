@@ -1,4 +1,4 @@
---- # file: roles/lxr/setup/tasks/030-setup_env.yml
+--- # file: roles/lxr/tasks/130-setup_env.yml
 
 # Setup the login environment of lxr_user
 

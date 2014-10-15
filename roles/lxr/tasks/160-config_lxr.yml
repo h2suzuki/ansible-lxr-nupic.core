@@ -1,4 +1,4 @@
---- # file: roles/lxr/setup/tasks/060-config_lxr.yml
+--- # file: roles/lxr/tasks/160-config_lxr.yml
 
 # Configure Lxr
 
@@ -37,7 +37,11 @@
 - name: initialize Lxr DB only if the DB file does not exist
   shell: creates={{ lxr_db_name }} chdir={{ lxr_custom_dir }} ./initdb.sh
 
+- name: tranfer the default log for github
+  copy: src=GitHub-Mark-64px.png
+    dest={{ lxr_dir ~ "/LXRimages/GitHub-Mark-64px.png" }}
+
 - name: transfer the customized page header
   template: src=html-head-btn.html.j2
-    dest={{ lxr_dir ~"/templates/html/html-head-btn.html" }}
+    dest={{ lxr_dir ~ "/templates/html/html-head-btn.html" }}
     backup=yes

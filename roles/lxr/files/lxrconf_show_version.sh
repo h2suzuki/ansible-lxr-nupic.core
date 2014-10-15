@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# file: roles/lxr/tree_retrieval/files/lxrconf_show_version.sh
+# file: roles/lxr/files/lxrconf_show_version.sh
 
 usage()
 {

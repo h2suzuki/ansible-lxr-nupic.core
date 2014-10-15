@@ -1,0 +1,16 @@
+--- # file: roles/lxr/tasks/main.yml
+
+# Lxr role's top level main.yml: include and tag the three phases.
+
+# Assumed remote_user: root
+
+- include_vars:
+    "{{ ansible_os_family ~ ansible_distribution_major_version }}.yml"
+
+- { include: 100-setup.yml,          tags: setup }
+- { include: 200-tree_retrieval.yml, tags: tree_retrieval }
+- { include: 300-indexing.yml,       tags: indexing }
+
+- name: the configured url notice
+  debug:
+    msg: '{{ httpd_server_url ~ "/lxr/" ~ lxr_tree_name ~ "/source" }}'

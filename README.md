@@ -6,7 +6,7 @@ This playbook deploys Lxr Source Code Indexer and Cross-referencer.  Then, it do
 This playbook is tested for the controller and the target machines with:
 
  - Ansible 1.7-1
- - CentOS 6.5
+ - CentOS 6.5, CentOS 7
 
 This playbook can index any git repository that "ctag" can handle, but the configuration file is set to index [nupic.core](https://github.com/numenta/nupic.core) because it is the purpose of this project.
 

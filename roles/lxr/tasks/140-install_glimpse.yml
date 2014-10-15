@@ -1,4 +1,4 @@
---- # file: roles/lxr/setup/tasks/040-install_glimpse.yml
+--- # file: roles/lxr/tasks/140-install_glimpse.yml
 
 # Install Glimpse to lxr_user's home directory
 
@@ -20,7 +20,7 @@
   register: glimpse_downloaded_tarball
   when: lxr_use_search_engine == "glimpse"
 
-- include: build_and_install_tarball.yml
+- include: inc/build_and_install_tarball.yml
   vars:
     tarball: ~/glimpse.tar.gz
     build_dir: ~/glimpse

@@ -1,4 +1,4 @@
---- # roles/lxr/setup/handlers/main.yml
+--- # file: roles/lxr/handlers/main.yml
 
 - name: reload iptables
   service: name=iptables state=reloaded

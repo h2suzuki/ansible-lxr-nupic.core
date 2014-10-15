@@ -1,12 +1,10 @@
---- # group_vers/RHEL6
+--- # file: roles/lxr/vars/RedHat7.yml
 
-httpd_version:    '2.2'
+httpd_version:    '2.4'
 httpd_main_conf:  '/etc/httpd/conf/httpd.conf'
 httpd_lxr_conf:   '/etc/httpd/conf.d/apache-lxrserver.conf'
-httpd_server_url: '{{ "http://" ~ httpd_server_name ~":"~ httpd_port }}'
 
 # EPEL repository package
 Fedora_site: 'http://dl.fedoraproject.org/pub'
-EPEL_repo_pkg: '/epel/6/x86_64/epel-release-6-8.noarch.rpm'
+EPEL_repo_pkg: '/epel/7/x86_64/e/epel-release-7-2.noarch.rpm'
 EPEL_repo_url: '{{ Fedora_site ~ EPEL_repo_pkg }}'
-

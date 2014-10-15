@@ -1,4 +1,4 @@
---- # file: roles/lxr/tree_retrieval/tasks/080-tree_retrieval.yml
+--- # file: roles/lxr/tasks/210-tree_retrieval.yml
 
 # Retrieve the source tree to browse, then add it to lxr_conf
 
@@ -8,7 +8,7 @@
   fail: msg="Do not know how to obtain the source tree"
   when: '{{ not source_tree_url | search("git") }}'
 
-- include: repo-git.yml
+- include: inc/repo_git.yml
   when: source_tree_url | search("git")
 
 - name: add lxr_tag_name to lxr_config
