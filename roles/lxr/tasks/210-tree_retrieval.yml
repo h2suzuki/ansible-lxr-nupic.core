@@ -16,6 +16,11 @@
   register: mod_result
   changed_when: mod_result.stdout | search("true")
 
+- name: remove the dummy initial tag from lxr_config
+  script: lxrconf_mod_version.sh {{ lxr_config }} delete INIT_TAG
+  register: mod_result2
+  changed_when: mod_result2.stdout | search("true")
+
 - name: obtain the version tags from lxr_config
   script: lxrconf_show_version.sh {{ lxr_config }}
   register: show_result

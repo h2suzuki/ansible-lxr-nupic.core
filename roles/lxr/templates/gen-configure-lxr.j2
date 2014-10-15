@@ -12,7 +12,6 @@
 #    lxr_tree_name:        the name of this source tree
 #    lxr_caption:          the title on the browser page
 #    lxr_source_repo_dir:  the directory to store versions of source trees
-#    lxr_tag_name:         the initial version tag to be stored
 #    lxr_db_name:          the path to the sqlite DB file
 #    lxr_config_script:    the configuration script provided by Lxr
 #    lxr_dir:              the top directory of untar'ed lxr
@@ -46,7 +45,7 @@ configure_lxr_responses = {
     r'--- Caption in page header.*>.* ':'{{ lxr_caption }}\n',
     r'--- Source directory.*>.* ':'{{ lxr_source_repo_dir ~"/"~ lxr_tree_name }}\n',
     r'Label for version selection menu.*>.* ':'TAG\n',
-    r'--- Version name\?  .*>.* ':'{{ lxr_tag_name }}\n',
+    r'--- Version name\?  .*>.* ':'INIT_TAG\n',
     r'--- Version name\? \(hit return to stop.*>.* ':'\n',
     r'--- Database file.*>.* ':'{{ lxr_db_name }}\n',
     r'Configure another tree.*>.* ':'no\n',

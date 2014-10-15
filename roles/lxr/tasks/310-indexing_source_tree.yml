@@ -4,7 +4,13 @@
 
 # Assumed remote_user: {{ lxr_user }}
 
-- name: notice
+- include: inc/repo_git_autotag.yml
+  when: lxr_tag_name is not defined and source_tree_url | search("git")
+
+- name: lxr_tag_name to be used
+  debug: msg={{ lxr_tag_name }}
+
+- name: "attention: indexing is starting"
   debug: msg="Indexing can take very long time. Login to {{ lxr_user }} and
               tail -f {{ indexing_progress_file }} to see the current status."
 

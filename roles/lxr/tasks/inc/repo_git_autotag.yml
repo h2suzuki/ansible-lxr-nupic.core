@@ -1,0 +1,26 @@
+--- # file: roles/lxr/tasks/inc/repo_git_auto_tag_name.yml
+
+# Generate lxr_tag_name from the bare repo and lxr_tag_vcs
+
+# Assumed remote_user: {{ lxr_user }}
+
+# Required vars:
+#   lxr_source_repo_dir: the url of the remote repository to checkout
+#   lxr_tree_name:       the directory name to store the final source tree
+#   lxr_tag_vcs:         the tag name to be indexed
+
+- name: locate the bare repos
+  set_fact:
+    bare_repo: '{{ lxr_source_repo_dir ~"/"~ lxr_tree_name ~".git" }}'
+
+- name: lxr_tag_name - git log
+  command: chdir={{ bare_repo }}
+    git log {{ lxr_tag_vcs }} -1 --pretty=format:"%ai %h"
+  register: gitlog_result
+  changed_when: False
+
+- name: lxr_tag_name - set_fact
+  set_fact:
+    lxr_tag_name: '{{ gitlog_result.stdout |
+            regex_replace("^([^ ]*) [^ ]* [^ ]* ([^ ]*)$","\\1.[\\2]") }}'
+  when: lxr_tag_name is not defined or lxr_tag_name == ''

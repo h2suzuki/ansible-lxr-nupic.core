@@ -17,10 +17,12 @@
 #                                        v
 # local: /path/to/source_repo/proj_name/v1.0.1/ (a specific version)
 
-- name: locate the bare & the destination repos
+
+# Minimize the remote data transfer by having the local bare repo.
+
+- name: locate the bare repos
   set_fact:
     bare_repo: '{{ lxr_source_repo_dir ~"/"~ lxr_tree_name ~".git" }}'
-    dest_repo: '{{ lxr_source_repo_dir ~"/"~ lxr_tree_name ~"/"~ lxr_tag_name }}'
 
 - name: update the local repository by clone
   git: repo={{ source_tree_url }} remote={{ source_tree_url }}
@@ -33,6 +35,24 @@
   git: repo={{ source_tree_url }} remote={{ source_tree_url }}
        dest={{ bare_repo }} bare=yes
   when: clone_result | failed
+
+
+
+# Fine out lxr_tag_name from the bare repo if it is undefined.
+
+- include: repo_git_autotag.yml
+  when: lxr_tag_name is not defined or lxr_tag_name == ''
+
+
+
+# Checkout the target version to the target directory.
+
+- name: lxr_tag_name to be used
+  debug: msg={{ lxr_tag_name }}
+
+- name: locate the destination repos
+  set_fact:
+    dest_repo: '{{ lxr_source_repo_dir ~"/"~ lxr_tree_name ~"/"~ lxr_tag_name }}'
 
 - name: checkout using lxr_tag_vcs
   git: repo={{ bare_repo }} version={{ lxr_tag_vcs }}
