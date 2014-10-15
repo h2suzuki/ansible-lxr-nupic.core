@@ -15,26 +15,36 @@ This playbook can index any git repository that "ctag" can handle, but the confi
 
 Firstly edit the "hosts" inventory file to indicate the machines where you want to deploy Lxr.  Secondly edit the "group_vars/lxr-servers" file to set the configuration parameters such as the web server url.
 
+Then, setup the ssh remote login via root to your target machine:
+
+        ssh-copy-id root@<your_machine_address>
+
 Then, run the playbook like the below:
 
         ansible-playbook -i hosts site.yml
 
-When the playbook run completes, you should be able to explore the target source tree on the web server URL, which is indicated by "group_vars/lxr-servers".
+When the playbook run completes, you should be able to explore the target source tree on the URL which is indicated by "group_vars/lxr-servers".
 
         http://{{ httpd_server_name }}:{{ httpd_port }}/lxr/{{ lxr_tree_name }}/source
 
+In case the target machine has SELinux running, the playbook will stop and ask you to reboot the machine to **disable SELinux**.  Run the playbook again.  The playbook will resume the operations.
 
-## Special notes
 
- - This playbook **disables SELinux** on the target machine, and you may be asked to reboot the machine.  After the reboot, run the playbook again.  The playbook confirms that SELinux is off and continues its setup.
+
+## Some internals
 
  - This playbook consists of three phases (using tags):
 
-   1. the setup phase: install and configure Lxr on the target machine
-   2. the tree_retrieval phase: store the source tree in Lxr's internal directory
-   3. the indexing phase: index the source tree for cross-referencing & searching
+   1. setup phase: install and configure Lxr on the target machine
+   2. tree_retrieval phase: store the source tree in Lxr's internal directory
+   3. indexing phase: index the source tree for cross-referencing & searching
 
-   In order to setup the target machine, the playbook requires root ssh login.  It will create `lxr_user` user during the setup phase.  After that, it only uses `lxr_user` user to retrieve and index the source tree.
+ - This playbook uses root on the target machine:
+
+   In order to setup the target machine, the playbook requires root ssh login.  It will create `lxr_user` user during the setup phase.
+
+   For tree_retrieval and indexing phases, the playbook uses `lxr_user` user only which has been created during setup phase.
+
 
 
 ## Other usages
@@ -44,12 +54,12 @@ There are several useful tags that you can use after the initial setup.
 When the target repository has a new commit and you want to **add that new version** of the source tree to be index, just run:
 
         ansible-playbook -i hosts site.yml --tags retrieve_source,indexing
-         
-          or 
-         
+
+or by the reversed way:
+
         ansible-playbook -i hosts site.yml --skip-tags setup
 
-If you want to instruct the playbook to use a specific tag, edit `lxr_tag_vcs` in "group_vars/lxr-servers". Then, run the above command. Optionally, you can override the version name shown on the browser by defining `lxr_tag_name` in the configuration file.
+To retrieve and index a specific version of source tree, edit `lxr_tag_vcs` in "group_vars/lxr-servers". Then, run the above command. Optionally, you can override the version name shown on the browser by defining `lxr_tag_name` in the configuration file.
 
 You can also pass `lxr_tag_name` and `lxr_tag_vcs` using "-e" command line option, if you don't want to edit the configuration file.
 
@@ -60,12 +70,12 @@ To list the versions of the tree, specify `list_tree_tags`.
 
         ansible-playbook -i hosts site.yml --tags list_tree_tags
 
-To index the tree again, with special parameters to be supplied to Lxr `genxref` command, use `lxr_genref_opts`.  The below example performes garbage collection by dropping unreferenced data from DB.
+To index the tree with special parameters to be supplied to Lxr `genxref` command, use `lxr_genref_opts`.  The below example performes garbage collection by dropping unreferenced data from DB.
 
         ansible-playbook -i hosts site.yml --tags indexing \
           -e 'lxr_genref_opts="--reindexall --allversions"'
 
-During setup, you can skip OS tweaking (such as firewall setting) and package checks by "--skip-tags os_settings" option.
+During setup phase, you can skip OS tweaking and package checks by "--skip-tags os_settings" option.
 
         ansible-playbook -i hosts site.yml --tags setup --skip-tags os_settings
 
