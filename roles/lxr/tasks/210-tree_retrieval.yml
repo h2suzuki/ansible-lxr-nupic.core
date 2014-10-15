@@ -4,29 +4,29 @@
 
 # Assumed remote_user: {{ lxr_user }}
 
-- name: check the repository type
+- name: tree_retrieval | check the repository type
   fail: msg="Do not know how to obtain the source tree"
   when: not ( source_tree_url | search("git") )
 
 - include: inc/repo_git.yml
   when: source_tree_url | search("git")
 
-- name: add lxr_tag_name to lxr_config
+- name: tree_retrieval | add lxr_tag_name to lxr_config
   script: lxrconf_mod_version.sh {{ lxr_config }} add "{{ lxr_tag_name }}"
   register: mod_result
   changed_when: mod_result.stdout | search("true")
 
-- name: remove the dummy initial tag from lxr_config
+- name: tree_retrieval | remove the dummy tag out of lxr_config
   script: lxrconf_mod_version.sh {{ lxr_config }} delete INIT_TAG
   register: mod_result2
   changed_when: mod_result2.stdout | search("true")
 
-- name: obtain the version tags from lxr_config
+- name: tree_retrieval | obtain the version tags from lxr_config
   script: lxrconf_show_version.sh {{ lxr_config }}
   register: show_result
   changed_when: false
   tags: list_tree_tags
 
-- name: these tags will be shown on the browser
+- name: tree_retrieval | the version tags to be shown on the browser
   debug: var=show_result.stdout_lines
   tags: list_tree_tags

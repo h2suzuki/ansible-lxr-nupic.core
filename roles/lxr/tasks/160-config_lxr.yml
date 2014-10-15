@@ -4,24 +4,24 @@
 
 # Assumed remote_user: {{ lxr_user }}
 
-- name: generate the pexpect script to run configure-lxr.pl
+- name: setup | lxr_config | generate the pexpect script
   template: src=gen-configure-lxr.j2 dest=~/gen-configure-lxr.py mode=0755
   register: genscript
 
-- name: check if lxr.conf exists in lxr_custom_dir
+- name: setup | lxr_config | check if lxr.conf exists in lxr_custom_dir
   stat: path={{ lxr_custom_dir ~ "/lxr.conf" }}
   register: st
 
-- name: determine if lxr_config needs an update
+- name: setup | lxr_config | determine if lxr_config need to update
   set_fact:
     update_lxr_config: "{{ st.stat.exists == False or st.stat.size == 0 or
                            genscript | changed }}"
 
-- name: run the generated script to dump lxr.conf & initdb.sh
+- name: setup | lxr_config | dump lxr.conf and initdb.sh
   command: chdir={{ lxr_user_home }} ~/gen-configure-lxr.py
   when: update_lxr_config
 
-- name: patch the dumped lxr.conf to ignore .git
+- name: setup | lxr_config | patch the dumped lxr.conf to ignore .git
   lineinfile:
     dest={{ lxr_custom_dir ~ "/lxr.conf" }}
     regexp="^\t, 'ignoredirs'"
@@ -30,18 +30,18 @@
     state=present
   register: ignoredirs_result
 
-- name: copy the config file to the right place
+- name: setup | lxr_config | copy the config file to the right place
   command: cp {{ lxr_custom_dir ~ "/lxr.conf" }} {{ lxr_config }}
   when: update_lxr_config or ignoredirs_result | changed
 
-- name: initialize Lxr DB only if the DB file does not exist
+- name: setup | lxr_config | initialize Lxr DB
   shell: creates={{ lxr_db_name }} chdir={{ lxr_custom_dir }} ./initdb.sh
 
-- name: tranfer the default log for github
-  copy: src=GitHub-Mark-64px.png
-    dest={{ lxr_dir ~ "/LXRimages/GitHub-Mark-64px.png" }}
-
-- name: transfer the customized page header
+- name: setup | lxr_config | transfer the customized page header
   template: src=html-head-btn.html.j2
     dest={{ lxr_dir ~ "/templates/html/html-head-btn.html" }}
     backup=yes
+
+- name: setup | lxr_config | tranfer the default logo icon for github
+  copy: src=GitHub-Mark-64px.png
+    dest={{ lxr_dir ~ "/LXRimages/GitHub-Mark-64px.png" }}

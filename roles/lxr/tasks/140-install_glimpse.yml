@@ -4,17 +4,17 @@
 
 # Assumed remote_user: {{ lxr_user }}
 
-- name: check if glimpse binary exists
+- name: setup | glimpse | check if the binary exists
   stat: path={{ glimpse_bin }}
   register: st
   when: lxr_use_search_engine == "glimpse"
 
-- name: notice about the glimpse tarball
+- name: setup | glimpse | notice about the tarball
   debug: msg="If the remote tarball is changed,
               sha256sum(csum) must be updated by hand."
   when: lxr_use_search_engine == "glimpse"
 
-- name: download the glimpse tarball
+- name: setup | glimpse | download the tarball
   get_url: url={{ glimpse_download_url }} sha256sum={{ glimpse_csum }}
     dest=~/glimpse.tar.gz force=True
   register: glimpse_downloaded_tarball

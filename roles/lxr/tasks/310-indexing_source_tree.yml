@@ -7,14 +7,16 @@
 - include: inc/repo_git_autotag.yml
   when: lxr_tag_name is not defined and source_tree_url | search("git")
 
-- name: lxr_tag_name to be used
+- name: indexing | lxr_tag_name to be used
   debug: var=lxr_tag_name
 
-- name: "attention: indexing is starting"
-  debug: msg="Indexing can take very long time. Login to {{ lxr_user }} and
-              tail -f {{ indexing_progress_file }} to see the current status."
+- name: indexing | *** ATTENTION *** 
+  debug: msg='Indexing is starting...  
+              Indexing can take very long time. Login the target machine
+              via {{ lxr_user }} user and run "tail -f  
+              {{ indexing_progress_file }}" to see the current progress.'
 
-- name: index the source directory
+- name: indexing | index the source directory
   shell: chdir={{ lxr_dir }}
     ./genxref --url={{ httpd_server_url ~ "/lxr/" ~ lxr_tree_name }}
     --version={{ lxr_tag_name }} {{ lxr_genref_opts|default("") }}

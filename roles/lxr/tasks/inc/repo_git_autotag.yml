@@ -9,17 +9,17 @@
 #   lxr_tree_name:       the directory name to store the final source tree
 #   lxr_tag_vcs:         the tag name to be indexed
 
-- name: locate the bare repos
+- name: repo_git_autotag | locate the bare repos
   set_fact:
     bare_repo: '{{ lxr_source_repo_dir ~"/"~ lxr_tree_name ~".git" }}'
 
-- name: lxr_tag_name - git log
+- name: repo_git_autotag | obtain the commit date using "git log"
   command: chdir={{ bare_repo }}
     git log {{ lxr_tag_vcs }} -1 --pretty=format:"%ai %h"
   register: gitlog_result
   changed_when: False
 
-- name: lxr_tag_name - set_fact
+- name: repo_git_autotag | set_fact lxr_tag_name
   set_fact:
     lxr_tag_name: '{{ gitlog_result.stdout |
             regex_replace("^([^ ]*) [^ ]* [^ ]* ([^ ]*)$","\\1.[\\2]") }}'

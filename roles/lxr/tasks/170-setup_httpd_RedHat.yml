@@ -4,7 +4,7 @@
 
 # Assumed remote_user: root
 
-- name: patch the httpd config file to allow httpd_port(1/2)
+- name: setup | httpd | patch the config file for httpd_port(1/2)
   lineinfile:
     dest={{ lxr_custom_dir ~ "/apache-lxrserver.conf" }}
     regexp="^NameVirtualHost "
@@ -12,7 +12,7 @@
     state=present
   register: rc1
 
-- name: patch the httpd config file to allow httpd_port(1/2)
+- name: setup | httpd | patch the config file for httpd_port(2/2)
   lineinfile:
     dest={{ lxr_custom_dir ~ "/apache-lxrserver.conf" }}
     regexp="^<VirtualHost "
@@ -20,16 +20,16 @@
     state=present
   register: rc2
 
-- name: clean the outdated httpd config
+- name: setup | httpd | clean the outdated config file
   file: path={{ httpd_lxr_conf }} state=absent
   when: rc1 | changed or rc2 | changed
 
-- name: copy the httpd config file to the right place
+- name: setup | httpd | copy the config file to the right place
   command: creates={{ httpd_lxr_conf }}
     cp {{ lxr_custom_dir ~ "/apache-lxrserver.conf" }} {{ httpd_lxr_conf }}
   notify: reload httpd
 
-- name: set ServerName of httpd_main_conf
+- name: setup | httpd | set ServerName
   lineinfile:
     dest={{ httpd_main_conf }}
     regexp="^ServerName"
@@ -38,7 +38,7 @@
     state=present
   notify: reload httpd
 
-- name: set Listen port of httpd_main_conf
+- name: setup | httpd | set Listen port
   lineinfile:
     dest={{ httpd_main_conf }}
     regexp="^Listen"
@@ -47,13 +47,13 @@
     state=present
   notify: reload httpd
 
-- name: change lxr_user home directory to be world searchable
+- name: setup | httpd | change the home dir to be world searchable
   file: path=~{{ lxr_user }} state=directory mode=0711
 
-- name: change glimpse DB directory to be world searchable
+- name: setup | httpd | change glimpse DB dir to be world searchable
   file: path={{ lxr_glimpse_db_dir }} state=directory mode=0755
   when: lxr_use_search_engine == "glimpse"
 
-- name: change Lxr DB to be world writable
+- name: setup | httpd | change Lxr DB file to be world writable
   file: path={{ lxr_db_name }} state=file mode=0666
 

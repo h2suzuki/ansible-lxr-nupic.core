@@ -4,28 +4,28 @@
 
 # Assumed remote_user: root
 
-- name: ensure the system has libselinux-python
+- name: setup,os_settings | ensure the system has libselinux-python
   yum: name=libselinux-python state=present
 
-- name: disable selinux in the config file
+- name: setup,os_settings | disable selinux in the config file
   selinux: state=disabled
 
-- name: check if a reboot is required
+- name: setup,os_settings | check if a reboot is required
   command: getenforce
   register: selinux_state
   changed_when: no
 
-- name: bailing out for a reboot
+- name: setup,os_settings | bailing out for a reboot
   fail: msg="Reboot the system and rerun the playbook after that."
   when: selinux_state.stdout != "Disabled"
 
-- name: open httpd port
+- name: setup,os_settings | open httpd port
   firewalld: permanent=yes port={{ httpd_port }}/tcp state=enabled
   notify: reload firewalld
 
-- name: setup the user for lxr
+- name: setup,os_settings | setup the user for lxr
   user: name="{{ lxr_user }}" state=present
 
-- name: register ssh public key to lxr_user
+- name: setup,os_settings | register ssh public key to lxr_user
   authorized_key: user="{{ lxr_user }}" key="{{ lxr_user_login_pubkey }}"
 

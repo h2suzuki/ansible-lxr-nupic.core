@@ -4,6 +4,7 @@
 
 # Assumed remote_user: {{ lxr_user }}
 
+#---------------------------------------------------------------------------
 # Required vars:
 #   source_tree_url:     the url of the remote repository to checkout
 #   lxr_source_repo_dir: the directory to store the "bare" copy at local
@@ -16,15 +17,16 @@
 #                                        | checkout
 #                                        v
 # local: /path/to/source_repo/proj_name/v1.0.1/ (a specific version)
+#---------------------------------------------------------------------------
 
 
 # Minimize the remote data transfer by having the local bare repo.
 
-- name: locate the bare repos
+- name: repo_git | determine the bare repo path
   set_fact:
     bare_repo: '{{ lxr_source_repo_dir ~"/"~ lxr_tree_name ~".git" }}'
 
-- name: update the local repository by clone
+- name: repo_git | update the local repository by clone
   git: repo={{ source_tree_url }} remote={{ source_tree_url }}
        dest={{ bare_repo }} bare=yes
   register: clone_result
@@ -47,24 +49,24 @@
 
 # Checkout the target version to the target directory.
 
-- name: lxr_tag_name to be used
+- name: repo_git | lxr_tag_name to be used
   debug: var=lxr_tag_name
 
-- name: locate the destination repos
+- name: repo_git | determine the destination repo path
   set_fact:
     dest_repo: '{{ lxr_source_repo_dir ~"/"~ lxr_tree_name ~"/"~ lxr_tag_name }}'
 
-- name: checkout using lxr_tag_vcs
+- name: repo_git | checkout by lxr_tag_vcs to dest_repo
   git: repo={{ bare_repo }} version={{ lxr_tag_vcs }}
        dest={{ dest_repo }} depth=1
   register: rc
   ignore_errors: True
 
-- name: clean the source tree that seems broken
+- name: repo_git | clean the source tree that seems broken
   file: path={{ dest_repo }} state=absent
   when: rc | failed
 
-- name: checkout using lxr_tag_vcs (try again)
+- name: repo_git | retry
   git: repo={{ bare_repo }} version={{ lxr_tag_vcs }}
        dest={{ dest_repo }} depth=1
   when: rc | failed

@@ -10,33 +10,32 @@
 #    prefix_dir: ~/local
 #    sudo_install: False
 
-- name: expand prefix_dir to obtain the absolute path
+- name: build_install | expand prefix_dir to obtain the absolute path
   command: chdir={{ prefix_dir }} pwd
   register: prefix
   changed_when: False
 
-- name: cleanup the build directory
+- name: build_install | cleanup the build directory
   file: path={{ build_dir }} state=absent
 
-- name: prepare the build directory
+- name: build_install | prepare the build directory
   file: path={{ build_dir }} state=directory
 
-- name: untar the tarball
+- name: build_install | untar the tarball
   command: tar -xzf {{ tarball }} -C {{ build_dir }} --strip-components=1
 
-- name: run ./configure
+- name: build_install | run ./configure
   command: chdir={{ build_dir }} ./configure --prefix={{ prefix.stdout }}
 
-- name: make
+- name: build_install | make
   command: chdir={{ build_dir }} make
 
-- name: make check
+- name: build_install | make check
   command: chdir={{ build_dir }} make check
 
-- name: make install
+- name: build_install | make install
   command: chdir={{ build_dir }} make install
   sudo: sudo_install
 
-- name: cleanup the build directory
+- name: build_install | cleanup the build directory
   file: path={{ build_dir }} state=absent
-
