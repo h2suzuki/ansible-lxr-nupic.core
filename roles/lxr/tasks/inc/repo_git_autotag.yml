@@ -22,5 +22,5 @@
 - name: repo_git_autotag | set_fact lxr_tag_name
   set_fact:
     lxr_tag_name: '{{ gitlog_result.stdout |
-            regex_replace("^([^ ]*) [^ ]* [^ ]* ([^ ]*)$","\\1.[\\2]") }}'
+            regex_replace("^([^ ]*) [^ ]* [^ ]* ([^ ]*)$","\\1.tree:\\2") }}'
   when: lxr_tag_name is not defined or lxr_tag_name == ''
