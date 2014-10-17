@@ -13,7 +13,7 @@
 - name: setup,os_settings | check if a reboot is required
   command: getenforce
   register: selinux_state
-  changed_when: no
+  changed_when: False
 
 - name: setup,os_settings | bailing out for a reboot
   fail: msg="Reboot the system and rerun the playbook after that."

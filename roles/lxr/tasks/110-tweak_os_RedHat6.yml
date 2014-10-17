@@ -13,7 +13,7 @@
 - name: setup,os_settings | check if a reboot is required
   command: getenforce
   register: selinux_state
-  changed_when: no
+  changed_when: False
 
 - name: setup,os_settings | bailing out for a reboot
   fail: msg="Reboot the system and rerun the playbook after that."
@@ -23,7 +23,7 @@
   command: service iptables status
   register: firewall
   ignore_errors: yes
-  changed_when: no
+  changed_when: False
 
 - name: setup,os_settings | create /etc/sysconfig/iptabes if it does not exist
   command: creates=/etc/sysconfig/iptables

@@ -24,7 +24,7 @@
 - name: tree_retrieval | obtain the version tags from lxr_config
   script: lxrconf_show_version.sh {{ lxr_config }}
   register: show_result
-  changed_when: false
+  changed_when: False
   tags: list_tree_tags
 
 - name: tree_retrieval | the version tags to be shown on the browser
