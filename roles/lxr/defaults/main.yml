@@ -6,11 +6,13 @@ source_tree_url: 'https://github.com/h2suzuki/ansible-lxr-nupic.core.git'
 lxr_tree_name: 'ansible-lxr-nupic.core'
 lxr_tag_vcs:   'HEAD'
 
-# The tag name is automatically generated as "{commit_date}.[{short_hash}]"
-# for git, unless lxr_tag_name is defined to override this behavior.
-# Note that either space nor () are allowed.
+# The tag name, which is shown on the browser, is automatically generated
+# as "{commit_date}.tree:{short_hash}" for git, unless lxr_tag_name is
+# explicitly defined to override this behavior.
 #
-# lxr_tag_name: 'some-name-shown-on-your-browser'
+# Note that either a space nor () are allowed.
+#
+# lxr_tag_name: 'the-name-shown-on-your-browser-for-this-tree-version'
 
 lxr_caption:   'Ansible-Lxr-Nupic.core Source'
 lxr_logo_url:  'LXRimages/GitHub-Mark-64px.png'
