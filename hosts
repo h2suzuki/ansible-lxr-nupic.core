@@ -1,7 +1,7 @@
 # file: hosts
 
 # Specify the target machine to deploy Lxr. The names are also used
-# for httpd ServerName by default.
+# for httpd ServerName by default.  "localhost" is not allowed.
 
 [lxr-servers]
 #lxrserver.example.com
