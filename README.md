@@ -33,13 +33,13 @@ In case the target machine has SELinux running, the playbook will stop and ask y
 
 ## Some internals
 
- - This playbook consists of three phases (using tags):
+ - This playbook consists of three phases (using tags).
 
    1. setup phase: install and configure Lxr on the target machine
    2. tree_retrieval phase: store the source tree in the internal directory
    3. indexing phase: index the source tree for cross-referencing & searching
 
- - This playbook uses root on the target machine:
+ - This playbook uses root on the target machine.
 
    In order to setup the target machine, the playbook requires root ssh login.  It will create `lxr_user` user during the setup phase.
 
