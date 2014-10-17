@@ -7,6 +7,9 @@
 - name: setup,os_settings | ensure the system has libselinux-python
   yum: name=libselinux-python state=present
 
+
+# ---- SELinux settings ----
+
 - name: setup,os_settings | disable selinux in the config file
   selinux: state=disabled
 
@@ -19,9 +22,15 @@
   fail: msg="Reboot the system and rerun the playbook after that."
   when: selinux_state.stdout != "Disabled"
 
+
+# ---- Firewall settings ----
+
 - name: setup,os_settings | open httpd port
   firewalld: permanent=yes port={{ httpd_port }}/tcp state=enabled
   notify: reload firewalld
+
+
+# ---- Lxr_user settings ----
 
 - name: setup,os_settings | setup the user for lxr
   user: name="{{ lxr_user }}" state=present

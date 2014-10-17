@@ -7,6 +7,9 @@
 - name: setup,os_settings | ensure the system has libselinux-python
   yum: name=libselinux-python state=present
 
+
+# ---- SELinux settings ----
+
 - name: setup,os_settings | disable selinux in the config file
   selinux: state=disabled
 
@@ -18,6 +21,9 @@
 - name: setup,os_settings | bailing out for a reboot
   fail: msg="Reboot the system and rerun the playbook after that."
   when: selinux_state.stdout != "Disabled"
+
+
+# ---- Firewall settings ----
 
 - name: setup,os_settings | check if firewall is running
   command: service iptables status
@@ -39,6 +45,8 @@
     state=present
   notify: reload iptables
   when: firewall.stdout | search("INPUT")
+
+# ---- Lxr_user settings ----
 
 - name: setup,os_settings | setup the user for lxr
   user: name="{{ lxr_user }}" state=present
