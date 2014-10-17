@@ -31,7 +31,14 @@
   ignore_errors: yes
   changed_when: False
 
-- name: setup,os_settings | create /etc/sysconfig/iptabes if it does not exist
+- name: setup,os_settings | check the current status of iptables
+  shell: (iptables -L -n;iptables -L) | grep -q '^ACCEPT.*dpt:{{ httpd_port }}'
+  register: iptables_state
+  ignore_errors: True
+  changed_when: False
+  when: firewall.stdout | search("INPUT")
+
+- name: setup,os_settings | dump iptables to /etc/sysconfig/iptabes
   command: creates=/etc/sysconfig/iptables
     /etc/rc.d/init.d/iptables save
   when: firewall.stdout | search("INPUT")
@@ -43,8 +50,12 @@
     line="-A INPUT -m tcp -p tcp --dport {{ httpd_port }} -j ACCEPT"
     insertbefore="^-A INPUT.*REJECT"
     state=present
-  notify: reload iptables
   when: firewall.stdout | search("INPUT")
+
+- name: setup,os_settings | reload iptables
+  service: name=iptables state=reloaded
+  when: firewall.stdout | search("INPUT") and iptables_state.rc != 0
+
 
 # ---- Lxr_user settings ----
 
