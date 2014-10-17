@@ -27,7 +27,6 @@
 - name: setup | httpd | copy the config file to the right place
   command: creates={{ httpd_lxr_conf }}
     cp {{ lxr_custom_dir ~ "/apache-lxrserver.conf" }} {{ httpd_lxr_conf }}
-  notify: reload httpd
 
 - name: setup | httpd | set ServerName
   lineinfile:
@@ -36,7 +35,6 @@
     line="ServerName {{ httpd_server_name ~":"~ httpd_port }}"
     insertafter="^#ServerName "
     state=present
-  notify: reload httpd
 
 - name: setup | httpd | set Listen port
   lineinfile:
@@ -45,7 +43,6 @@
     line="Listen {{ httpd_port }}"
     insertafter="^#Listen "
     state=present
-  notify: reload httpd
 
 - name: setup | httpd | change the home dir to be world searchable
   file: path=~{{ lxr_user }} state=directory mode=0711
@@ -57,3 +54,5 @@
 - name: setup | httpd | change Lxr DB file to be world writable
   file: path={{ lxr_db_name }} state=file mode=0666
 
+- name: setup | httpd | reload httpd
+  service: name=httpd state=reloaded
