@@ -13,7 +13,7 @@
 - { include: 200-tree_retrieval.yml, tags: tree_retrieval }
 - { include: 300-indexing.yml,       tags: indexing }
 
-- name: url that this role is configureing
+- name: url that this role has configured
   debug:
     msg: '{{ httpd_server_url ~ "/lxr/" ~ lxr_tree_name ~ "/source" }}'
-  tags: [ setup, tree_retrieval, indexing ]
+  tags: indexing
