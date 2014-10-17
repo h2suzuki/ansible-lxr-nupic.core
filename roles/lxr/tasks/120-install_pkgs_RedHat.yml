@@ -7,50 +7,53 @@
 # This can also be written using "with_items:", yet we can see the progress
 # more clearly in this way.
 
-- name: setup,os_settings | (1/14) install ctags for lxr
+- name: setup,os_settings | (1/15) install ctags for lxr
   yum: state=latest name=ctags
 
-- name: setup,os_settings | (2/14) install perl for lxr
+- name: setup,os_settings | (2/15) install perl for lxr
   yum: state=latest name=perl
 
-- name: setup,os_settings | (3/14) install perl-DBI for lxr
+- name: setup,os_settings | (3/15) install perl-DBI for lxr
   yum: state=latest name=perl-DBI
 
-- name: setup,os_settings | (4/14) install perl-DBI-SQLite for lxr
+- name: setup,os_settings | (4/15) install perl-DBI-SQLite for lxr
   yum: state=latest name=perl-DBD-SQLite
 
-- name: setup,os_settings | (5/14) install sqlite for lxr
+- name: setup,os_settings | (5/15) install sqlite for lxr
   yum: state=latest name=sqlite
 
-- name: setup,os_settings | (6/14) install httpd for lxr
+- name: setup,os_settings | (6/15) install httpd for lxr
   yum: state=latest name=httpd
 
-- name: setup,os_settings | (7/14) install mod_perl for lxr
-  yum: state=latest name=mod_perl
-
-- name: setup,os_settings | (8/14) install pexpect to create lxr.conf
+- name: setup,os_settings | (7/15) install pexpect to create lxr.conf
   yum: state=latest name=pexpect
 
-- name: setup,os_settings | (9/14) install make for glimpse
+- name: setup,os_settings | (8/15) install git to obtain source trees
+  yum: state=latest name=git
+
+- name: setup,os_settings | (9/15) install make for glimpse
   yum: state=latest name=make
   when: lxr_use_search_engine == "glimpse"
 
-- name: setup,os_settings | (10/14) install gcc for glimpse
+- name: setup,os_settings | (10/15) install gcc for glimpse
   yum: state=present name=gcc-4*
   when: lxr_use_search_engine == "glimpse"
 
-- name: setup,os_settings | (11/14) install flex for glimpse
+- name: setup,os_settings | (11/15) install flex for glimpse
   yum: state=latest name=flex
   when: lxr_use_search_engine == "glimpse"
 
-- name: setup,os_settings | (12/14) install flex-devel for glimpse
+- name: setup,os_settings | (12/15) install flex-devel for glimpse
   yum: state=latest name=flex-devel
   when: lxr_use_search_engine == "glimpse" and
         ansible_distribution_major_version == '7'
 
-- name: setup,os_settings | (13/14) install epel for File-MMagic
+- name: setup,os_settings | (13/15) install EPEL
   yum: state=present name={{ EPEL_repo_url }}
 
-- name: setup,os_settings | (14/14) install File-MMagic for lxr
-  yum: state=latest name=perl-File-MMagic  # from EPEL
+- name: setup,os_settings | (14/15) install mod_perl for lxr
+  yum: state=latest name=mod_perl   # for RHEL7, only available from EPEL
+
+- name: setup,os_settings | (15/15) install File-MMagic for lxr
+  yum: state=latest name=perl-File-MMagic   # from EPEL
 
