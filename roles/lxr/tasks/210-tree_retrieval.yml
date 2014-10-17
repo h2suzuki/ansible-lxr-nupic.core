@@ -21,12 +21,12 @@
   register: mod_result2
   changed_when: mod_result2.stdout | search("true")
 
-- name: tree_retrieval | obtain the version tags from lxr_config
+- name: tree_retrieval | obtain the versions from lxr config file
   script: lxrconf_show_version.sh {{ lxr_config }}
   register: show_result
   changed_when: False
   tags: list_tree_tags
 
-- name: tree_retrieval | the version tags to be shown on the browser
+- name: tree_retrieval | the versions to be shown on the browser
   debug: var=show_result.stdout_lines
   tags: list_tree_tags
