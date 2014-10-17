@@ -4,7 +4,7 @@
 source_tree_url: 'https://github.com/numenta/nupic.core.git'
 
 lxr_tag_vcs:   'HEAD'
-#lxr_tag_name:  '2014-10-11'  # the default is "commit-date.[short-hash]"
+#lxr_tag_name:  '2014-10-11'  # the default is "commit-date.tree:short-hash"
 
 lxr_tree_name: 'nupic.core'
 lxr_caption:   'Nupic.core Source'
