@@ -1,4 +1,0 @@
---- # file: roles/lxr/handlers/main.yml
-
-- name: reload firewalld
-  service: name=firewalld state=reloaded

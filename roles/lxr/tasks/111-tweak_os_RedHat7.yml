@@ -25,9 +25,16 @@
 
 # ---- Firewall settings ----
 
+- name: setup,os_settings | check if firewalld is running
+  command: systemctl is-active firewalld
+  register: firewalld_result
+  changed_when: False
+  ignore_errors: True  # rc will be 3 when inactive
+
 - name: setup,os_settings | open httpd port
-  firewalld: permanent=yes port={{ httpd_port }}/tcp state=enabled
-  notify: reload firewalld
+  firewalld: permanent={{ item }} port={{ httpd_port }}/tcp state=enabled
+  with_items: [ True, False ]
+  when: firewalld_result.stdout == "active"
 
 
 # ---- Lxr_user settings ----
