@@ -4,9 +4,20 @@
 
 # Assumed remote_user: root
 
+- name: determine the appropriate OS file(1/2)
+  set_fact:
+    osfile: "{{ ansible_os_family ~ ansible_distribution_major_version }}"
+  when: ansible_os_family == "RedHat" and ansible_distribution != "Amazon"
+  tags: [ setup, tree_retrieval, indexing ]
+
+- name: determine the appropriate OS file(2/2)
+  set_fact:
+    osfile: "{{ ansible_os_family ~ '6' }}"
+  when: ansible_os_family == "RedHat" and ansible_distribution == "Amazon"
+  tags: [ setup, tree_retrieval, indexing ]
+
 - name: include OS dependent variables
-  include_vars:
-    "{{ ansible_os_family ~ ansible_distribution_major_version }}.yml"
+  include_vars: "{{ osfile }}.yml"
   tags: [ setup, tree_retrieval, indexing ]
 
 - { include: 100-setup.yml,          tags: setup }

@@ -4,23 +4,29 @@
 
 # Assumed remote_user: root
 
+# ---- SELinux settings ----
+
+- name: setup,os_settings | check if selinux is installed
+  stat: path=/etc/selinux/config
+  register: selinux_config
+
 - name: setup,os_settings | ensure the system has libselinux-python
   yum: name=libselinux-python state=present
-
-
-# ---- SELinux settings ----
+  when: selinux_config.stat.exists
 
 - name: setup,os_settings | disable selinux in the config file
   selinux: state=disabled
+  when: selinux_config.stat.exists
 
 - name: setup,os_settings | check if a reboot is required
   command: getenforce
   register: selinux_state
   changed_when: False
+  when: selinux_config.stat.exists
 
 - name: setup,os_settings | bailing out for a reboot
   fail: msg="Reboot the system and rerun the playbook after that."
-  when: selinux_state.stdout != "Disabled"
+  when: selinux_config.stat.exists and selinux_state.stdout != "Disabled"
 
 
 # ---- Firewall settings ----

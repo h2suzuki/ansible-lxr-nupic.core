@@ -46,14 +46,15 @@
 - name: setup,os_settings | (12/15) install flex-devel for glimpse
   yum: state=latest name=flex-devel
   when: lxr_use_search_engine == "glimpse" and
-        ansible_distribution_major_version == '7'
+        ( ansible_distribution_major_version == '7' or
+          ansible_distribution == 'Amazon' )
 
 - name: setup,os_settings | (13/15) install EPEL
   yum: state=present name={{ EPEL_repo_url }}
+  when: ansible_distribution != 'Amazon'
 
 - name: setup,os_settings | (14/15) install mod_perl for lxr
   yum: state=latest name=mod_perl   # for RHEL7, only available from EPEL
 
 - name: setup,os_settings | (15/15) install File-MMagic for lxr
-  yum: state=latest name=perl-File-MMagic   # from EPEL
-
+  yum: state=latest name=perl-File-MMagic enablerepo=epel  # from EPEL
